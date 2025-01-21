@@ -1,6 +1,7 @@
 package net.minebo.practice.aikar;
 
 import co.aikar.commands.PaperCommandManager;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.practice.Practice;
 import net.minebo.practice.aikar.completion.ChatColorCompletionHandler;
 import net.minebo.practice.aikar.completion.KitTypeCompletionHandler;
@@ -33,9 +34,12 @@ public class ACFCommandController {
 
         Practice.getInstance().setCommandController(new PaperCommandManager(Practice.getInstance()));
 
+        Practice.getInstance().getCommandController().getCommandReplacements().addReplacement("vanishcheck", "false");
+
         Practice.getInstance().getCommandController().getCommandContexts().registerContext(ChatColor.class, new ChatColorContextResolver());
         Practice.getInstance().getCommandController().getCommandContexts().registerContext(UUID.class, new UUIDContextResolver());
         Practice.getInstance().getCommandController().getCommandContexts().registerContext(KitType.class, new KitTypeContextResolver());
+        Practice.getInstance().getCommandController().getCommandContexts().registerContext(OnlinePlayer.class, new OnlinePlayerResolver());
 
         Practice.getInstance().getCommandController().getCommandCompletions().registerCompletion("arenaschematics", new SchematicCompletionHandler());
         Practice.getInstance().getCommandController().getCommandCompletions().registerCompletion("kittypes", new KitTypeCompletionHandler());

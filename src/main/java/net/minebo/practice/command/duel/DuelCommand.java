@@ -78,7 +78,7 @@ public final class DuelCommand extends BaseCommand {
 
             new SelectKitTypeMenu(kitType -> {
                 ((Player) sender).closeInventory();
-                duel(((Player) sender), (OnlinePlayer) target.getPlayer(), kitType);
+                duel(((Player) sender), target, kitType);
             }, "Select a kit type...").openMenu(((Player) sender));
         } else if (senderParty == null) {
             // player dueling party (illegal)
