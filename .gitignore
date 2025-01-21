@@ -1,0 +1,17 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+/lib/server.jar
+
+# Maven
+log/
+target/
+dependency-reduced-pom.xml
+
+# JRebel
+rebel.xml

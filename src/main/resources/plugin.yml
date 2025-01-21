@@ -1,0 +1,8 @@
+name: Practice
+author: Ian Rich
+version: 1.0
+main: net.minebo.practice.Practice
+depend:
+  - ProtocolLib
+softdepend:
+  - HolographicDisplays
