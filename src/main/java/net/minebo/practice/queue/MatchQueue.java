@@ -123,7 +123,7 @@ public final class MatchQueue {
             teamA.messageAlive(ChatColor.GREEN + ChatColor.BOLD.toString() + "Match Found!");
             teamA.messageAlive("");
             teamA.messageAlive("Kit: " + kitType.getColoredDisplayName());
-            teamA.messageAlive("Opponent: " + Joiner.on(", ").join(PatchedPlayerUtils.mapToNames(teamB.getAllMembers())));
+            teamA.messageAlive("Opponent: " + Joiner.on(", ").join(PatchedPlayerUtils.mapToDisplayNames(teamB.getAllMembers())));
             teamA.messageAlive("Ping: " + ChatColor.AQUA + Joiner.on(", ").join(PatchedPlayerUtils.mapToPings(teamB.getAllMembers())));
             teamA.messageAlive("");
 
@@ -131,7 +131,7 @@ public final class MatchQueue {
             teamB.messageAlive(ChatColor.GREEN + ChatColor.BOLD.toString() + "Match Found!");
             teamB.messageAlive("");
             teamB.messageAlive("Kit: " + kitType.getColoredDisplayName());
-            teamB.messageAlive("Opponent: " + Joiner.on(", ").join(PatchedPlayerUtils.mapToNames(teamA.getAllMembers())));
+            teamB.messageAlive("Opponent: " + Joiner.on(", ").join(PatchedPlayerUtils.mapToDisplayNames(teamA.getAllMembers())));
             teamB.messageAlive("Ping: " + ChatColor.AQUA + Joiner.on(", ").join(PatchedPlayerUtils.mapToPings(teamA.getAllMembers())));
             teamB.messageAlive("");
 

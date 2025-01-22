@@ -1,5 +1,7 @@
 package net.minebo.practice.lobby.listener;
 
+import net.minebo.practice.util.VisibilityUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -46,6 +48,8 @@ public final class LobbyGeneralListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         lobbyHandler.returnToLobby(event.getPlayer());
+
+        Bukkit.getOnlinePlayers().forEach(player -> VisibilityUtils.showPlayerInTab(player, event.getPlayer()));
     }
 
     @EventHandler

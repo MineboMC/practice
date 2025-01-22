@@ -84,6 +84,16 @@ public class PatchedPlayerUtils {
         return uuids.stream().map(Practice.getInstance().uuidCache::name).collect(Collectors.toList());
     }
 
+    public static List<String> mapToDisplayNames(Collection<UUID> uuids) {
+        List<String> pings = new ArrayList<>();
+
+        for(UUID uuid : uuids) {
+            pings.add(Bukkit.getPlayer(uuid).getDisplayName());
+        };
+
+        return pings;
+    }
+
     public static List<String> mapToPings(Collection<UUID> uuids) {
         List<String> pings = new ArrayList<>();
 

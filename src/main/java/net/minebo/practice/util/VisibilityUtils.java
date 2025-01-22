@@ -10,7 +10,10 @@ import net.minebo.practice.party.PartyHandler;
 import net.minebo.practice.profile.setting.Setting;
 import net.minebo.practice.profile.setting.SettingHandler;
 
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -25,6 +28,7 @@ public final class VisibilityUtils {
         for (Player otherPlayer : Bukkit.getOnlinePlayers()) {
             target.hidePlayer(otherPlayer);
             otherPlayer.hidePlayer(target);
+            showPlayerInTab(target, otherPlayer);
         }
 
         Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> updateVisibility(target), 10L);
@@ -36,12 +40,14 @@ public final class VisibilityUtils {
                 otherPlayer.showPlayer(target);
             } else {
                 otherPlayer.hidePlayer(target);
+                showPlayerInTab(target, otherPlayer);
             }
 
             if (shouldSeePlayer(target, otherPlayer)) {
                 target.showPlayer(otherPlayer);
             } else {
                 target.hidePlayer(otherPlayer);
+                showPlayerInTab(target, otherPlayer);
             }
         }
     }
@@ -77,6 +83,26 @@ public final class VisibilityUtils {
 
             return !targetIsSpectator || (viewerSpecSetting && viewerIsSpectator && !target.hasMetadata("ModMode"));
         }
+    }
+
+    public static void showPlayerInTab(Player toPlayer, Player hiddenPlayer) {
+        EntityPlayer hiddenEntity = ((CraftPlayer) hiddenPlayer).getHandle();
+        PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(
+                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER,
+                hiddenEntity
+        );
+
+        ((CraftPlayer) toPlayer).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    public static void hidePlayerFromTab(Player toPlayer, Player hiddenPlayer) {
+        EntityPlayer hiddenEntity = ((CraftPlayer) hiddenPlayer).getHandle();
+        PacketPlayOutPlayerInfo packet = new PacketPlayOutPlayerInfo(
+                PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER,
+                hiddenEntity
+        );
+
+        ((CraftPlayer) toPlayer).getHandle().playerConnection.sendPacket(packet);
     }
 
 }
