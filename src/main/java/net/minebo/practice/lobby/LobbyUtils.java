@@ -1,6 +1,7 @@
 package net.minebo.practice.lobby;
 
 import net.minebo.practice.Practice;
+import net.minebo.practice.events.EventItems;
 import net.minebo.practice.match.duel.DuelHandler;
 import net.minebo.practice.profile.follow.FollowHandler;
 import net.minebo.practice.kit.KitItems;
@@ -136,6 +137,7 @@ public final class LobbyUtils {
                 inventory.setItem(1, QueueItems.JOIN_SOLO_RANKED_QUEUE_ITEM);
 
                 inventory.setItem(4, LobbyItems.ENABLE_SPEC_MODE_ITEM);
+                inventory.setItem(5, EventItems.getEventItem());
 
                 if (player.hasPermission("potpvp.admin")) {
                     inventory.setItem(6, LobbyItems.PLAYER_STATISTICS);

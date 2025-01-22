@@ -64,7 +64,7 @@ final class LobbyScoreGetter implements BiConsumer<Player, List<String>> {
             if (queue.isRanked()) {
                 int elo = eloHandler.getElo(entry.getMembers(), queue.getKitType());
                 int window = entry.getWaitSeconds() * QueueHandler.RANKED_WINDOW_GROWTH_PER_SECOND;
-                scores.add(ChatColor.WHITE + "ELO Range: " + ChatColor.YELLOW + Math.max(0, (elo - window)) + " - " + (elo + window));
+                scores.add(ChatColor.WHITE + " &fELO Range: " + ChatColor.YELLOW + Math.max(0, (elo - window)) + " - " + (elo + window));
             }
         } else if (tournament != null) {
             scores.add("");

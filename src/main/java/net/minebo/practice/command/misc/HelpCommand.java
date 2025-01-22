@@ -45,7 +45,7 @@ public class HelpCommand extends BaseCommand {
 
     private static final List<String> HELP_MESSAGE_FOOTER = ImmutableList.of(
         "",
-        "§5Server Information:",
+        "§6Server Information:",
         "§f Teamspeak§7: §ets.minebo.net",
         "§f Rules§7: §eminebo.net/rules",
         "§f Store§7: §ebuy.minebo.net",

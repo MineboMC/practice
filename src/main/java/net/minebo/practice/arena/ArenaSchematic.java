@@ -8,6 +8,7 @@ import java.io.File;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minebo.practice.events.enums.EventType;
 
 /**
  * Represents an arena schematic. See {@link net.frozenorb.potpvp.arena}
@@ -79,6 +80,11 @@ public final class ArenaSchematic {
 
     @Getter @Setter private String eventName = null;
 
+    @Getter @Setter private Boolean supportsSumo = false;
+    @Getter @Setter private Boolean supportsLMS = false;
+    @Getter @Setter private Boolean supportsOITC = false;
+    @Getter @Setter private Boolean supportsDeathRace = false;
+
     /**
      * Index on the X axis on the grid (and in calculations regarding model arenas)
      * @see ArenaGrid
@@ -133,4 +139,5 @@ public final class ArenaSchematic {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

@@ -5,6 +5,7 @@ import net.minebo.practice.profile.setting.Setting;
 import net.minebo.practice.util.menu.Button;
 import net.minebo.practice.util.menu.Menu;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public final class SettingsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Edit settings";
+        return ChatColor.YELLOW.toString() + ChatColor.BOLD + "Preferences";
     }
 
     @Override

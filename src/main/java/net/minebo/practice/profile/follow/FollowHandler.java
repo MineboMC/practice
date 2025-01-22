@@ -8,6 +8,7 @@ import net.minebo.practice.match.MatchState;
 import net.minebo.practice.util.InventoryUtils;
 import net.minebo.practice.util.VisibilityUtils;
 
+import net.minebo.practice.util.nametags.NameTagHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public final class FollowHandler {
         } else {
             InventoryUtils.resetInventoryDelayed(player);
             VisibilityUtils.updateVisibility(player);
-//            PotPvPRP.getInstance().getNameTagHandler().reloadOthersFor(player);
+            NameTagHandler.reloadOthersFor(player);
 
             player.teleport(target);
         }
@@ -57,7 +58,7 @@ public final class FollowHandler {
             player.sendMessage(ChatColor.BLUE + "Stopped following " + ChatColor.YELLOW + Practice.getInstance().getUuidCache().name(prevTarget) + ChatColor.BLUE + ".");
             InventoryUtils.resetInventoryDelayed(player);
             VisibilityUtils.updateVisibility(player);
-//            PotPvPRP.getInstance().getNameTagHandler().reloadOthersFor(player);
+            NameTagHandler.reloadOthersFor(player);
         }
     }
 

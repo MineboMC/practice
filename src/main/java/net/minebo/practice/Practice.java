@@ -11,7 +11,9 @@ import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 
 import lombok.Setter;
+import net.minebo.practice.events.EventHandler;
 import net.minebo.practice.misc.Cache;
+import net.minebo.practice.nametag.NameTagAdapter;
 import net.minebo.practice.scoreboard.ScoreboardAdapter;
 import net.minebo.practice.aikar.ACFCommandController;
 import net.minebo.practice.arena.ArenaHandler;
@@ -33,7 +35,9 @@ import net.minebo.practice.pvpclasses.PvPClassHandler;
 import net.minebo.practice.queue.QueueHandler;
 import net.minebo.practice.tournament.TournamentHandler;
 import net.minebo.practice.util.ChunkSnapshotAdapter;
+import net.minebo.practice.util.ClickTracker;
 import net.minebo.practice.util.menu.ButtonListener;
+import net.minebo.practice.util.nametags.NameTagHandler;
 import net.minebo.practice.util.scoreboard.api.AssembleStyle;
 import net.minebo.practice.util.scoreboard.api.ScoreboardHandler;
 import net.minebo.practice.util.serialization.*;
@@ -99,8 +103,10 @@ public final class Practice extends JavaPlugin {
     private EloHandler eloHandler;
     private PvPClassHandler pvpClassHandler;
     private TournamentHandler tournamentHandler;
+    private EventHandler eventHandler;
 
     public ScoreboardHandler scoreboardHandler;
+    public NameTagHandler nameTagHandler;
 
     public UUIDCache uuidCache;
 
@@ -133,7 +139,10 @@ public final class Practice extends JavaPlugin {
         settingHandler = new SettingHandler();
         pvpClassHandler = new PvPClassHandler();
         tournamentHandler = new TournamentHandler();
+        eventHandler = new EventHandler();
         postMatchInvHandler = new PostMatchInvHandler();
+
+        ClickTracker.init();
 
         this.getServer().getPluginManager().registerEvents(new BasicPreventionListener(), this);
         this.getServer().getPluginManager().registerEvents(new BowHealthListener(), this);
@@ -196,5 +205,8 @@ public final class Practice extends JavaPlugin {
         this.scoreboardHandler = new ScoreboardHandler(this, scoreboardAdapter);
         this.scoreboardHandler.setAssembleStyle(AssembleStyle.KOHI);
         this.scoreboardHandler.setTicks(2L);
+
+        this.nameTagHandler = new NameTagHandler(this);
+        this.nameTagHandler.registerProvider(new NameTagAdapter());
     }
 }

@@ -98,14 +98,12 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
         }
 
         if (match.getState() == MatchState.ENDING) {
-            scores.add(ChatColor.WHITE + "Match ended");
+            scores.add(ChatColor.WHITE + "Match ended.");
             return;
         }
 
         boolean participant = match.getTeam(player.getUniqueId()) != null;
-        boolean renderPing = false;
-
-        renderMetaLines(scores, match, participant);
+        boolean renderPing = true;
 
         if (participant) {
             renderPing = renderParticipantLines(scores, match, player);
@@ -113,6 +111,8 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
             MatchTeam previousTeam = match.getPreviousTeam(player.getUniqueId());
             renderSpectatorLines(scores, match, previousTeam);
         }
+
+        renderMetaLines(scores, match, participant);
 
         if (renderPing) {
             renderPingLines(scores, match, player);
@@ -123,7 +123,7 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
         // check (we can't define the lambda up top and reference because we reference the
         // scores variable)
 
-        followingOpt.ifPresent(uuid -> scores.add("&fFollowing: &c" + Practice.getInstance().getUuidCache().name(uuid)));
+        followingOpt.ifPresent(uuid -> scores.add("&fFollowing: &e" + Bukkit.getPlayer(Practice.getInstance().getUuidCache().name(uuid)).getDisplayName()));
     }
 
     private boolean renderParticipantLines(List<String> scores, Match match, Player player) {
@@ -163,15 +163,15 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
         String bardEnergyScore = getBardEnergyScore(player);
 
         if (archerMarkScore != null) {
-            scores.add("&fArcher Mark&7: &c" + archerMarkScore);
+            scores.add("&fArcher Mark&7: &e" + archerMarkScore);
         }
 
         if (bardEffectScore != null) {
-            scores.add("&fBard Effect&7: &c" + bardEffectScore);
+            scores.add("&fBard Effect&7: &e" + bardEffectScore);
         }
 
         if (bardEnergyScore != null) {
-            scores.add("&fBard Energy&7: &c" + bardEnergyScore);
+            scores.add("&fBard Energy&7: &e" + bardEnergyScore);
         }
 
         return ping;

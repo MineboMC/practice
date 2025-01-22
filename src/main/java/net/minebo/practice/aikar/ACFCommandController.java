@@ -11,6 +11,8 @@ import net.minebo.practice.aikar.context.*;
 import net.minebo.practice.command.*;
 import net.minebo.practice.command.duel.AcceptCommand;
 import net.minebo.practice.command.duel.DuelCommand;
+import net.minebo.practice.command.event.EventCommands;
+import net.minebo.practice.command.event.HostCommand;
 import net.minebo.practice.command.match.LeaveCommand;
 import net.minebo.practice.command.match.MapCommand;
 import net.minebo.practice.command.match.SpectateCommand;
@@ -48,6 +50,9 @@ public class ACFCommandController {
 
         Practice.getInstance().getCommandController().registerCommand(new AcceptCommand());
         Practice.getInstance().getCommandController().registerCommand(new DuelCommand());
+
+        Practice.getInstance().getCommandController().registerCommand(new EventCommands());
+        Practice.getInstance().getCommandController().registerCommand(new HostCommand());
 
         Practice.getInstance().getCommandController().registerCommand(new LeaveCommand());
         Practice.getInstance().getCommandController().registerCommand(new MapCommand());

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import net.minebo.practice.util.nametags.NameTagHandler;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -161,8 +162,8 @@ public final class Match {
                 player.setNoDamageTicks(20);
                 player.setMaximumNoDamageTicks(20);
 
-//                PotPvPRP.getInstance().getNameTagHandler().reloadPlayer(player);
-//                PotPvPRP.getInstance().getNameTagHandler().reloadOthersFor(player);
+                NameTagHandler.reloadPlayer(player);
+                NameTagHandler.reloadOthersFor(player);
 
                 visible.add(player);
 
@@ -445,8 +446,8 @@ public final class Match {
             player.getInventory().setHeldItemSlot(0);
         }
 
-//        PotPvPRP.getInstance().getNameTagHandler().reloadPlayer(player);
-//        PotPvPRP.getInstance().getNameTagHandler().reloadOthersFor(player);
+        NameTagHandler.reloadPlayer(player);
+        NameTagHandler.reloadOthersFor(player);
 
         VisibilityUtils.updateVisibility(player);
         PatchedPlayerUtils.resetInventory(player, GameMode.CREATIVE, true); // because we're about to reset their inv on a timer

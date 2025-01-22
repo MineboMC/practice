@@ -1,6 +1,7 @@
 package net.minebo.practice.lobby;
 
 import net.minebo.practice.Practice;
+import net.minebo.practice.events.EventHandler;
 import net.minebo.practice.profile.follow.FollowHandler;
 import net.minebo.practice.command.silent.UnfollowCommand;
 import net.minebo.practice.lobby.listener.LobbyGeneralListener;
@@ -11,6 +12,7 @@ import net.minebo.practice.util.InventoryUtils;
 import net.minebo.practice.util.PatchedPlayerUtils;
 import net.minebo.practice.util.VisibilityUtils;
 
+import net.minebo.practice.util.nametags.NameTagHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -54,8 +56,8 @@ public final class LobbyHandler {
     private void returnToLobbySkipItemSlot(Player player) {
         player.teleport(getLobbyLocation());
 
-//        PotPvPRP.getInstance().getNameTagHandler().reloadPlayer(player);
-//        PotPvPRP.getInstance().getNameTagHandler().reloadOthersFor(player);
+        NameTagHandler.reloadPlayer(player);
+        NameTagHandler.reloadOthersFor(player);
 
         VisibilityUtils.updateVisibility(player);
         PatchedPlayerUtils.resetInventory(player, GameMode.SURVIVAL, true);
@@ -71,6 +73,10 @@ public final class LobbyHandler {
     }
 
     public boolean isInLobby(Player player) {
+
+        if(EventHandler.getCurrentEvent() != null)
+            return !EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId());
+
         return !Practice.getInstance().getMatchHandler().isPlayingOrSpectatingMatch(player);
     }
 

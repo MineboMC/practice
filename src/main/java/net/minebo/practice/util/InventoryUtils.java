@@ -1,6 +1,8 @@
 package net.minebo.practice.util;
 
 import net.minebo.practice.Practice;
+import net.minebo.practice.events.EventHandler;
+import net.minebo.practice.events.EventUtils;
 import net.minebo.practice.lobby.LobbyUtils;
 import net.minebo.practice.match.MatchHandler;
 import net.minebo.practice.match.MatchUtils;
@@ -25,6 +27,8 @@ public final class InventoryUtils {
 
         if (matchHandler.isPlayingOrSpectatingMatch(player)) {
             MatchUtils.resetInventory(player);
+        } else if( EventHandler.getCurrentEvent() != null ? ((EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId()) && EventHandler.getCurrentEvent() != null)) : false ) {
+            EventUtils.resetInventory(player);
         } else {
             LobbyUtils.resetInventory(player);
         }

@@ -153,6 +153,7 @@ public final class MatchHandler {
         Match match = new Match(kitType, openArenaOpt.get(), teams, ranked, allowRematches);
 
         hostedMatches.add(match);
+
         match.startCountdown();
 
         return match;

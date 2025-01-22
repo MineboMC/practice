@@ -6,6 +6,7 @@ import net.minebo.practice.util.TimeUtils;
 import net.minebo.practice.match.MatchTeam;
 import net.minebo.practice.pvpclasses.PvPClass;
 import net.minebo.practice.pvpclasses.PvPClassHandler;
+import net.minebo.practice.util.nametags.NameTagHandler;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
@@ -134,12 +135,12 @@ public class ArcherClass extends PvPClass {
                 getMarkedBy().putIfAbsent(shooter.getName(), new HashSet<>());
                 getMarkedBy().get(shooter.getName()).add(new MutablePair<>(player.getName(), System.currentTimeMillis() + (MARK_SECONDS * 1000)));
 
-//                PotPvPRP.getInstance().getNameTagHandler().reloadPlayer(player);
+                NameTagHandler.reloadPlayer(player);
 
                 new BukkitRunnable() {
 
                     public void run() {
-//                        PotPvPRP.getInstance().getNameTagHandler().reloadPlayer(player);
+                        NameTagHandler.reloadPlayer(player);
                     }
 
                 }.runTaskLater(Practice.getInstance(), (MARK_SECONDS * 20) + 5);

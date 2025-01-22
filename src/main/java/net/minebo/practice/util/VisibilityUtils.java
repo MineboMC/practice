@@ -1,6 +1,7 @@
 package net.minebo.practice.util;
 
 import net.minebo.practice.Practice;
+import net.minebo.practice.events.EventHandler;
 import net.minebo.practice.profile.follow.FollowHandler;
 import net.minebo.practice.match.Match;
 import net.minebo.practice.match.MatchHandler;
@@ -45,11 +46,15 @@ public final class VisibilityUtils {
         }
     }
 
-    private boolean shouldSeePlayer(Player viewer, Player target) {
+    private static boolean shouldSeePlayer(Player viewer, Player target) {
         SettingHandler settingHandler = Practice.getInstance().getSettingHandler();
         FollowHandler followHandler = Practice.getInstance().getFollowHandler();
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
         MatchHandler matchHandler = Practice.getInstance().getMatchHandler();
+
+        if(Practice.getInstance().getLobbyHandler().isInLobby(viewer) && Practice.getInstance().getLobbyHandler().isInLobby(target) && target.hasPermission("potpvp.donor") && !target.hasMetadata("invisible")){
+            return true;
+        }
 
         Match targetMatch = matchHandler.getMatchPlayingOrSpectating(target);
 
@@ -58,11 +63,12 @@ public final class VisibilityUtils {
             Party targetParty = partyHandler.getParty(target);
             Optional<UUID> following = followHandler.getFollowing(viewer);
 
+            boolean viewerInEvent = (EventHandler.getCurrentEvent() == null) ? false : EventHandler.getCurrentEvent().isPlayerInEvent(viewer.getUniqueId());
             boolean viewerPlayingMatch = matchHandler.isPlayingOrSpectatingMatch(viewer);
             boolean viewerSameParty = targetParty != null && targetParty.isMember(viewer.getUniqueId());
             boolean viewerFollowingTarget = following.isPresent() && following.get().equals(target.getUniqueId());
 
-            return viewerPlayingMatch || viewerSameParty || viewerFollowingTarget;
+            return viewerPlayingMatch || viewerSameParty || viewerFollowingTarget || viewerInEvent;
         } else {
             // we're in a match so we only hide other spectators (if our settings say so)
             boolean targetIsSpectator = targetMatch.isSpectator(target.getUniqueId());

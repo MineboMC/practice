@@ -42,25 +42,32 @@ public final class SelectKitTypeMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return ChatColor.BLUE.toString() + ChatColor.BOLD + title;
+        return ChatColor.YELLOW.toString() + ChatColor.BOLD + title;
     }
 
     @Override
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
-        int index = 0;
+
+        int x = 1;
+        int y = 0;
 
         for (KitType kitType : KitType.getAllTypes()) {
+
             if (!player.isOp() && kitType.isHidden()) {
                 continue;
             }
+            buttons.put(getSlot(x, y), new KitTypeButton(kitType, callback));
 
-            buttons.put(index++, new KitTypeButton(kitType, callback));
+            if (x == 8) {
+                y++;
+                x = 1;
+            }
         }
 
         Party party = Practice.getInstance().getPartyHandler().getParty(player);
         if (party != null) {
-            buttons.put(8, new KitTypeButton(KitType.teamFight, callback));
+            buttons.put(getSlot(x, y), new KitTypeButton(KitType.teamFight, callback));
         }
 
         return buttons;

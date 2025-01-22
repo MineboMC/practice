@@ -3,6 +3,7 @@ package net.minebo.practice.scoreboard;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import net.minebo.practice.events.EventHandler;
 import net.minebo.practice.util.scoreboard.construct.ScoreGetter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,13 +17,16 @@ final class MultiplexingScoreGetter implements ScoreGetter {
 
     private final BiConsumer<Player, List<String>> matchScoreGetter;
     private final BiConsumer<Player, List<String>> lobbyScoreGetter;
+    private final BiConsumer<Player, List<String>> eventScoreGetter;
 
     MultiplexingScoreGetter(
         BiConsumer<Player, List<String>> matchScoreGetter,
-        BiConsumer<Player, List<String>> lobbyScoreGetter
+        BiConsumer<Player, List<String>> lobbyScoreGetter,
+        BiConsumer<Player, List<String>> eventScoreGetter
     ) {
         this.matchScoreGetter = matchScoreGetter;
         this.lobbyScoreGetter = lobbyScoreGetter;
+        this.eventScoreGetter = eventScoreGetter;
     }
 
     @Override
@@ -32,9 +36,13 @@ final class MultiplexingScoreGetter implements ScoreGetter {
         SettingHandler settingHandler = Practice.getInstance().getSettingHandler();
 
         if (settingHandler.getSetting(player, Setting.SHOW_SCOREBOARD)) {
-             scores.add("&7&m-------------------");
+             scores.add("&7&m--------------------");
             if (matchHandler.isPlayingOrSpectatingMatch(player)) {
                 matchScoreGetter.accept(player, scores);
+            } else if (EventHandler.getCurrentEvent() != null) {
+                if(EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId())) {
+                    eventScoreGetter.accept(player, scores);
+                }
             } else {
                 lobbyScoreGetter.accept(player, scores);
             }
@@ -43,7 +51,7 @@ final class MultiplexingScoreGetter implements ScoreGetter {
             if (player.hasMetadata("ModMode")) {
                 scores.add(ChatColor.GRAY.toString() + ChatColor.BOLD + "In Silent Mode");
             }
-            scores.add("&r&7&m-------------------");
+            scores.add("&r&7&m--------------------");
         }
     }
 

@@ -64,7 +64,7 @@ public final class DuelCommand extends BaseCommand {
                         sender.sendMessage(Lang.NOT_LEADER_OF_PARTY);
                     }
                 }
-            }, "Select a kit type...").openMenu(((Player) sender));
+            }, "Select a ladder...").openMenu(((Player) sender));
         } else if (senderParty == null && targetParty == null) {
             // player dueling player (legal)
             if (!Validation.canSendDuel(((Player) sender), target.getPlayer())) {
@@ -165,9 +165,9 @@ public final class DuelCommand extends BaseCommand {
         TextComponent commandPart = new TextComponent("/accept " + sender);
         TextComponent secondPart = new TextComponent(" to accept the invite");
 
-        firstPart.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+        firstPart.setColor(net.md_5.bungee.api.ChatColor.GREEN);
         commandPart.setColor(net.md_5.bungee.api.ChatColor.AQUA);
-        secondPart.setColor(net.md_5.bungee.api.ChatColor.DARK_PURPLE);
+        secondPart.setColor(net.md_5.bungee.api.ChatColor.GREEN);
 
         ClickEvent.Action runCommand = ClickEvent.Action.RUN_COMMAND;
         HoverEvent.Action showText = HoverEvent.Action.SHOW_TEXT;
