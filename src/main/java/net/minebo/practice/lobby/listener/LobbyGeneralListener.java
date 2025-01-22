@@ -49,23 +49,6 @@ public final class LobbyGeneralListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntityType() != EntityType.PLAYER) {
-            return;
-        }
-
-        Player player = (Player) event.getEntity();
-
-        if (lobbyHandler.isInLobby(player)) {
-            if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                lobbyHandler.returnToLobby(player);
-            }
-
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onFoodLevelChange(FoodLevelChangeEvent event) {
         if (lobbyHandler.isInLobby((Player) event.getEntity())) {
             event.setCancelled(true);

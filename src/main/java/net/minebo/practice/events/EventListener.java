@@ -12,6 +12,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class EventListener implements Listener {
@@ -87,6 +88,17 @@ public class EventListener implements Listener {
         if (gameEvent.type == EventType.DEATHRACE && gameEvent.playerStates.get(event.getEntity().getUniqueId()) == EventPlayerState.FIGHTING) {
             event.setFoodLevel(20);
             return;
+        }
+    }
+
+    @org.bukkit.event.EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if(EventHandler.getCurrentEvent() != null) {
+            if (EventHandler.getCurrentEvent().isPlayerInEvent(event.getPlayer().getUniqueId())) {
+                if (EventHandler.getCurrentEvent().playerStates.get(event.getPlayer().getUniqueId()) == EventPlayerState.WAITING || EventHandler.getCurrentEvent().playerStates.get(event.getPlayer().getUniqueId()) == EventPlayerState.DEAD || EventHandler.getCurrentEvent().playerStates.get(event.getPlayer().getUniqueId()) == EventPlayerState.SPECTATING) {
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 }

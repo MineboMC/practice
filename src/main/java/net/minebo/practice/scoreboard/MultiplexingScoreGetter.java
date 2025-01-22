@@ -39,20 +39,30 @@ final class MultiplexingScoreGetter implements ScoreGetter {
              scores.add("&7&m--------------------");
             if (matchHandler.isPlayingOrSpectatingMatch(player)) {
                 matchScoreGetter.accept(player, scores);
-            } else if (EventHandler.getCurrentEvent() != null) {
-                if(EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId())) {
-                    eventScoreGetter.accept(player, scores);
-                }
+            } else if (isInEvent(player)) {
+                eventScoreGetter.accept(player, scores);
             } else {
                 lobbyScoreGetter.accept(player, scores);
             }
-            scores.add("");
-            scores.add("&eminebo.net");
+
             if (player.hasMetadata("ModMode")) {
                 scores.add(ChatColor.GRAY.toString() + ChatColor.BOLD + "In Silent Mode");
             }
+
+            scores.add("");
+            scores.add("&eminebo.net");
+
             scores.add("&r&7&m--------------------");
         }
+    }
+
+    public Boolean isInEvent(Player player) {
+        if (EventHandler.getCurrentEvent() != null) {
+            if (EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

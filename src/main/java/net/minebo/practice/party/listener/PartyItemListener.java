@@ -1,5 +1,6 @@
 package net.minebo.practice.party.listener;
 
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.practice.Practice;
 import net.minebo.practice.command.PartyCommands;
 import net.minebo.practice.party.Party;
@@ -79,7 +80,7 @@ public final class PartyItemListener implements Listener {
 
         if (party != null && PartyItems.icon(party).isSimilar(item)) {
             event.setCancelled(true);
-            new PartyCommands().partyInfo(player, player);
+            new PartyCommands().partyInfo(player, new OnlinePlayer(player));
             addCooldown(player, 500); // Add 500ms cooldown
         }
     }

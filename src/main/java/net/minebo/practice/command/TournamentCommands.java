@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * Project: potpvp-reprised
  */
 
-@CommandAlias("tourny|tournament")
+@CommandAlias("tourny|tournament|t")
 public class TournamentCommands extends BaseCommand {
 
     @Subcommand("start")
@@ -60,7 +60,7 @@ public class TournamentCommands extends BaseCommand {
         }
 
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7A &c&ltournament&7 has started. Type &5/join&7 to play. (0/" + (teamSize < 3 ? teamSize * requiredTeams : requiredTeams) + ")"));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7A &6&ltournament&7 has started. Type &e/t join&7 to play. &e(0/" + (teamSize < 3 ? teamSize * requiredTeams : requiredTeams) + ")"));
         Bukkit.broadcastMessage("");
 
         Tournament tournament;
@@ -158,7 +158,7 @@ public class TournamentCommands extends BaseCommand {
         }
 
         sender.sendMessage(Lang.LONG_LINE);
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7Live &cTournament &7Fights"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Tournament Matches"));
         sender.sendMessage("");
         List<Match> ongoingMatches = Practice.getInstance().getTournamentHandler().getTournament().getMatches().stream().filter(m -> m.getState() != MatchState.TERMINATED).collect(Collectors.toList());
 
@@ -167,9 +167,9 @@ public class TournamentCommands extends BaseCommand {
             MatchTeam secondTeam = match.getTeams().get(1);
 
             if (firstTeam.getAllMembers().size() == 1) {
-                sender.sendMessage("  " + ChatColor.GRAY + "» " + ChatColor.LIGHT_PURPLE + Practice.getInstance().uuidCache.name(firstTeam.getFirstMember()) + ChatColor.GRAY + " vs " + ChatColor.LIGHT_PURPLE + Practice.getInstance().uuidCache.name(secondTeam.getFirstMember()));
+                sender.sendMessage(Bukkit.getPlayer(Practice.getInstance().uuidCache.name(firstTeam.getFirstMember())).getDisplayName() + ChatColor.GRAY + " vs " + Bukkit.getPlayer(Practice.getInstance().uuidCache.name(secondTeam.getFirstMember())).getDisplayName());
             } else {
-                sender.sendMessage("  " + ChatColor.GRAY + "» " + ChatColor.LIGHT_PURPLE + Practice.getInstance().uuidCache.name(firstTeam.getFirstMember()) + ChatColor.GRAY + "'s team vs " + ChatColor.LIGHT_PURPLE + Practice.getInstance().uuidCache.name(secondTeam.getFirstMember()) + ChatColor.GRAY + "'s team");
+                sender.sendMessage(Bukkit.getPlayer(Practice.getInstance().uuidCache.name(firstTeam.getFirstMember())).getDisplayName() + ChatColor.GRAY + "'s team vs " + Bukkit.getPlayer(Practice.getInstance().uuidCache.name(secondTeam.getFirstMember())).getDisplayName() + ChatColor.GRAY + "'s team");
             }
         }
         sender.sendMessage(Lang.LONG_LINE);

@@ -68,31 +68,31 @@ final class LobbyScoreGetter implements BiConsumer<Player, List<String>> {
             }
         } else if (tournament != null) {
             scores.add("");
-            scores.add("&6&lTournament");
+            scores.add("&6&lTournament:");
 
             if (tournament.getStage() == Tournament.TournamentStage.WAITING_FOR_TEAMS) {
                 int teamSize = tournament.getRequiredPartySize();
-                scores.add("&f Kit&7: &e" + tournament.getType().getDisplayName());
-                scores.add("&f Team Size&7: " + teamSize + "v" + teamSize);
+                scores.add(" &fKit&7: &e" + tournament.getType().getDisplayName());
+                scores.add(" &fTeam Size&7: " + teamSize + "v" + teamSize);
                 int multiplier = teamSize < 3 ? teamSize : 1;
-                scores.add("&f " + (teamSize < 3 ? "Players"  : "Teams") + "&7: &e" + (tournament.getActiveParties().size() * multiplier + "/" + tournament.getRequiredPartiesToStart() * multiplier));
+                scores.add("&f" + (teamSize < 3 ? "Players"  : "Teams") + "&7: &e" + (tournament.getActiveParties().size() * multiplier + "/" + tournament.getRequiredPartiesToStart() * multiplier));
             } else if (tournament.getStage() == Tournament.TournamentStage.COUNTDOWN) {
                 if (tournament.getCurrentRound() == 0) {
                     scores.add("");
-                    scores.add("&7 Begins in &e" + tournament.getBeginNextRoundIn() + "&7 second" + (tournament.getBeginNextRoundIn() == 1 ? "." : "s."));
+                    scores.add(" &7Begins in &e" + tournament.getBeginNextRoundIn() + "&7 second" + (tournament.getBeginNextRoundIn() == 1 ? "." : "s."));
                 } else {
                     scores.add("");
-                    scores.add("&6 Round " + (tournament.getCurrentRound() + 1));
-                    scores.add("&7 Begins in &e" + tournament.getBeginNextRoundIn() + "&7 second" + (tournament.getBeginNextRoundIn() == 1 ? "." : "s."));
+                    scores.add(" &6Round " + ChatColor.YELLOW + (tournament.getCurrentRound() + 1));
+                    scores.add(" &7Begins in &e" + tournament.getBeginNextRoundIn() + "&7 second" + (tournament.getBeginNextRoundIn() == 1 ? "." : "s."));
                 }
             } else if (tournament.getStage() == Tournament.TournamentStage.IN_PROGRESS) {
-                scores.add("&6 Round&7: " + tournament.getCurrentRound());
+                scores.add(" &fRound&7: " + ChatColor.YELLOW + tournament.getCurrentRound());
 
                 int teamSize = tournament.getRequiredPartySize();
                 int multiplier = teamSize < 3 ? teamSize : 1;
 
-                scores.add("&e" + (teamSize < 3 ? "Players" : "Teams") + "&7: " + tournament.getActiveParties().size() * multiplier + "/" + tournament.getRequiredPartiesToStart() * multiplier);
-                scores.add("&f Duration: &c" + TimeUtils.formatIntoMMSS((int) (System.currentTimeMillis() - tournament.getRoundStartedAt()) / 1000));
+                scores.add("&f " + (teamSize < 3 ? "Players" : "Teams") + "&7: &e" + tournament.getActiveParties().size() * multiplier + "/" + tournament.getRequiredPartiesToStart() * multiplier);
+                scores.add("&f Duration: &e" + TimeUtils.formatIntoMMSS((int) (System.currentTimeMillis() - tournament.getRoundStartedAt()) / 1000));
             }
         } else if (playerParty != null) {
             scores.add("");

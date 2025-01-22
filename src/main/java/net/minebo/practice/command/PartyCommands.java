@@ -2,6 +2,7 @@ package net.minebo.practice.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import net.minebo.practice.misc.Lang;
@@ -138,15 +139,15 @@ public class PartyCommands extends BaseCommand {
     @Subcommand("i|who|info")
     @Description("View information of your party or another.")
     @CommandCompletion("@players")
-    public void partyInfo(Player sender, @Optional() Player target) {
-        if (target == null) target = sender;
-        Party party = Practice.getInstance().getPartyHandler().getParty(target);
+    public void partyInfo(Player sender, @Optional() OnlinePlayer target) {
+        if (target == null) target = new OnlinePlayer(sender);
+        Party party = Practice.getInstance().getPartyHandler().getParty(target.getPlayer());
 
         if (party == null) {
             if (sender == target) {
                 sender.sendMessage(Lang.NOT_IN_PARTY);
             } else {
-                sender.sendMessage(ChatColor.RED + target.getName() + " isn't in a party.");
+                sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " isn't in a party.");
             }
             return;
         }
@@ -194,7 +195,7 @@ public class PartyCommands extends BaseCommand {
     @Subcommand("add|invite")
     @Description("Invite a target to your party.")
     @CommandCompletion("@players")
-    public void partyInvite(Player sender, Player target) {
+    public void partyInvite(Player sender, OnlinePlayer target) {
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
         Party party = partyHandler.getParty(sender);
 
@@ -209,19 +210,19 @@ public class PartyCommands extends BaseCommand {
         }
 
         if (party != null) {
-            if (party.isMember(target.getUniqueId())) {
-                sender.sendMessage(ChatColor.RED + target.getName() + " is already in your party.");
+            if (party.isMember(target.getPlayer().getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " is already in your party.");
                 return;
             }
 
-            if (party.getInvite(target.getUniqueId()) != null) {
-                sender.sendMessage(ChatColor.RED + target.getName() + " already has a pending party invite.");
+            if (party.getInvite(target.getPlayer().getUniqueId()) != null) {
+                sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " already has a pending party invite.");
                 return;
             }
         }
 
-        if (partyHandler.hasParty(target)) {
-            sender.sendMessage(ChatColor.RED + target.getName() + " is already in another party.");
+        if (partyHandler.hasParty(target.getPlayer())) {
+            sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " is already in another party.");
             return;
         }
 
@@ -234,18 +235,18 @@ public class PartyCommands extends BaseCommand {
         }
 
         if (party.isLeader(sender.getUniqueId())) {
-            party.invite(target);
+            party.invite(target.getPlayer());
         } else {
-            PartyUtils.askLeaderToInvite(party, sender, target);
+            PartyUtils.askLeaderToInvite(party, sender, target.getPlayer());
         }
     }
 
     @Subcommand("join")
     @Description("Join a party.")
     @CommandCompletion("@players")
-    public void partyJoin(Player sender, Player target) {
+    public void partyJoin(Player sender, OnlinePlayer target) {
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
-        Party targetParty = partyHandler.getParty(target);
+        Party targetParty = partyHandler.getParty(target.getPlayer());
 
         if (partyHandler.hasParty(sender)) {
             sender.sendMessage(ChatColor.RED + "You are already in a party. You must leave your current party first.");
@@ -253,7 +254,7 @@ public class PartyCommands extends BaseCommand {
         }
 
         if (targetParty == null) {
-            sender.sendMessage(ChatColor.RED + target.getName() + " is not in a party.");
+            sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " is not in a party.");
             return;
         }
 
@@ -279,7 +280,7 @@ public class PartyCommands extends BaseCommand {
     @Subcommand("kick")
     @Description("Kick a player from a party.")
     @CommandCompletion("@players")
-    public void kick(Player sender, Player target) {
+    public void kick(Player sender, OnlinePlayer target) {
         Party party = Practice.getInstance().getPartyHandler().getParty(sender);
 
         if (party == null) {
@@ -288,29 +289,29 @@ public class PartyCommands extends BaseCommand {
             sender.sendMessage(Lang.NOT_LEADER_OF_PARTY);
         } else if (sender == target) {
             sender.sendMessage(ChatColor.RED + "You cannot kick yourself.");
-        } else if (!party.isMember(target.getUniqueId())) {
-            sender.sendMessage(ChatColor.RED + target.getName() + " isn't in your party.");
+        } else if (!party.isMember(target.getPlayer().getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " isn't in your party.");
         } else {
-            party.kick(target);
+            party.kick(target.getPlayer());
         }
     }
 
     @Subcommand("leader|promote")
     @Description("Promote a player in your party to leader.")
     @CommandCompletion("@players")
-    public void leader(Player sender, Player target) {
+    public void leader(Player sender, OnlinePlayer target) {
         Party party = Practice.getInstance().getPartyHandler().getParty(sender);
 
         if (party == null) {
             sender.sendMessage(Lang.NOT_IN_PARTY);
         } else if (!party.isLeader(sender.getUniqueId())) {
             sender.sendMessage(Lang.NOT_LEADER_OF_PARTY);
-        } else if (!party.isMember(target.getUniqueId())) {
-            sender.sendMessage(ChatColor.RED + target.getName() + " isn't in your party.");
-        } else if (sender == target) {
+        } else if (!party.isMember(target.getPlayer().getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " isn't in your party.");
+        } else if (sender == target.getPlayer()) {
             sender.sendMessage(ChatColor.RED + "You cannot promote yourself to the leader of your own party.");
         } else {
-            party.setLeader(target);
+            party.setLeader(target.getPlayer());
         }
     }
 

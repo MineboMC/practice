@@ -157,7 +157,7 @@ public class EventHandler {
         player.sendMessage(ChatColor.GREEN + "You have joined the " + currentEvent.getType().getName() + " event.");
 
         if (currentEvent.state == EventState.WAITING) {
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', player.getDisplayName() + ChatColor.GRAY + " joined the " + ChatColor.YELLOW + currentEvent.getType().getName() + ChatColor.GRAY + " event. " + ChatColor.YELLOW + "("+ Event.activePlayers.size() + "/" + currentEvent.getType().getMaxPlayers() + ")"));
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', player.getDisplayName() + ChatColor.GRAY + " joined the " + ChatColor.GOLD + currentEvent.getType().getName() + ChatColor.GRAY + " event. " + ChatColor.YELLOW + "("+ Event.activePlayers.size() + "/" + currentEvent.getType().getMaxPlayers() + ")"));
         }
     }
 

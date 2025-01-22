@@ -2,12 +2,9 @@ package net.minebo.practice.lobby;
 
 import net.minebo.practice.Practice;
 import net.minebo.practice.events.EventHandler;
+import net.minebo.practice.lobby.listener.*;
 import net.minebo.practice.profile.follow.FollowHandler;
 import net.minebo.practice.command.silent.UnfollowCommand;
-import net.minebo.practice.lobby.listener.LobbyGeneralListener;
-import net.minebo.practice.lobby.listener.LobbyItemListener;
-import net.minebo.practice.lobby.listener.LobbyParkourListener;
-import net.minebo.practice.lobby.listener.LobbySpecModeListener;
 import net.minebo.practice.util.InventoryUtils;
 import net.minebo.practice.util.PatchedPlayerUtils;
 import net.minebo.practice.util.VisibilityUtils;
@@ -40,6 +37,7 @@ public final class LobbyHandler {
         Bukkit.getPluginManager().registerEvents(new LobbyItemListener(this), Practice.getInstance());
         Bukkit.getPluginManager().registerEvents(new LobbySpecModeListener(), Practice.getInstance());
         Bukkit.getPluginManager().registerEvents(new LobbyParkourListener(), Practice.getInstance());
+        Bukkit.getPluginManager().registerEvents(new LobbyPreventionListener(), Practice.getInstance());
     }
 
     /**
@@ -74,8 +72,9 @@ public final class LobbyHandler {
 
     public boolean isInLobby(Player player) {
 
-        if(EventHandler.getCurrentEvent() != null)
+        if(EventHandler.getCurrentEvent() != null) {
             return !EventHandler.getCurrentEvent().isPlayerInEvent(player.getUniqueId());
+        }
 
         return !Practice.getInstance().getMatchHandler().isPlayingOrSpectatingMatch(player);
     }

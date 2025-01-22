@@ -88,13 +88,13 @@ public class Tournament {
         if (activeParties.size() == 1) {
             Party party = activeParties.get(0);
             if (party.getMembers().size() == 1) {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + PatchedPlayerUtils.getFormattedName(party.getLeader()) + " &fwon the tournament!"));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(party.getLeader())).getDisplayName() + " &fwon the tournament!"));
             } else if (party.getMembers().size() == 2) {
                 Iterator<UUID> membersIterator = party.getMembers().iterator();
                 UUID[] members = new UUID[] { membersIterator.next(), membersIterator.next() };
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + PatchedPlayerUtils.getFormattedName(members[0]) + " &7and &c&l" + PatchedPlayerUtils.getFormattedName(members[1]) + " &7won the tournament!"));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(members[0])).getDisplayName() + " &7and &c&l" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(members[1])).getDisplayName() + " &7won the tournament!"));
             } else {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + PatchedPlayerUtils.getFormattedName(party.getLeader()) + "&7's team won the tournament!"));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&l" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(party.getLeader())).getDisplayName() + "&7's team won the tournament!"));
             }
 
             activeParties.clear();
@@ -114,9 +114,9 @@ public class Tournament {
             case 2:
             case 1:
                 if (currentRound == 0) {
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7The &c&ltournament &7will begin in &c" + beginNextRoundIn + " &7second" + (beginNextRoundIn == 1 ? "" : "s") + "."));
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7The &6&ltournament &7will begin in &e" + beginNextRoundIn + " &7second" + (beginNextRoundIn == 1 ? "" : "s") + "."));
                 } else {
-                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lRound " + (currentRound + 1) + " &7will begin in &c" + beginNextRoundIn + " &7second" + (beginNextRoundIn == 1 ? "" : "s") + "."));
+                    Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&lRound " + (currentRound + 1) + " &7will begin in &e" + beginNextRoundIn + " &7second" + (beginNextRoundIn == 1 ? "" : "s") + "."));
                 }
             }
 
@@ -170,8 +170,8 @@ public class Tournament {
         beginNextRoundIn = 31;
         // Next round has begun...
 
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&c&lRound " + ++currentRound + " &7has begun. Good luck!"));
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7Use &c/t status &7to see who is fighting."));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&6&lRound " + ++currentRound + " &7has begun. Good luck!"));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7Use &e/t status &7to see who is fighting."));
 
         List<Party> oldPartyList = Lists.newArrayList(activeParties);
         // Collections.shuffle(oldPartyList);
@@ -226,7 +226,7 @@ public class Tournament {
         if (this.getCurrentRound() != -1) return;
 
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7A &c&ltournament&7 has started. Type &c/t join&7 to play. (" + (this.activeParties.size() * multiplier) + "/" + (requiredTeams * multiplier) + ")"));
+        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', "&7A &6&ltournament&7 has started. Type &e/t join&7 to play. &e(" + (this.activeParties.size() * multiplier) + "/" + (requiredTeams * multiplier) + ")"));
         Bukkit.broadcastMessage("");
     }
 
@@ -235,27 +235,27 @@ public class Tournament {
             // donor join
             String message;
             if (joiningParty.getMembers().size() == 1) {
-                message = ChatColor.translateAlternateColorCodes('&', "&c&lDONOR ONLY &7- " + PatchedPlayerUtils.getFormattedName(joiningParty.getLeader()) + "&7 &7has &7joined &7the &5tournament&7. &7(" + activeParties.size() + "/" + requiredPartiesToStart + "&7)");
+                message = ChatColor.translateAlternateColorCodes('&', "&6&lDONOR ONLY &7- " + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(joiningParty.getLeader())).getDisplayName() + "&7 &7has &7joined &7the &6tournament&7. &e(" + activeParties.size() + "/" + requiredPartiesToStart + "&e)");
             } else if (joiningParty.getMembers().size() == 2) {
                 Iterator<UUID> membersIterator = joiningParty.getMembers().iterator();
-                message = ChatColor.translateAlternateColorCodes('&', "&c&lDONOR ONLY &7- " + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + "&7 &7and &c" + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + "&7 have joined the &5tournament&7. &7(" + activeParties.size() * 2 + "/" + requiredPartiesToStart * 2 + "&7)");
+                message = ChatColor.translateAlternateColorCodes('&', "&6&lDONOR ONLY &7- " + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + "&7 &7and &c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + "&7 have joined the &6tournament&7. &e(" + activeParties.size() * 2 + "/" + requiredPartiesToStart * 2 + "&e)");
             } else {
-                message = ChatColor.translateAlternateColorCodes('&', "&c&lDONOR ONLY &7- " + PatchedPlayerUtils.getFormattedName(joiningParty.getLeader()) + "&7's team has joined the &5tournament&7. &7(" + activeParties.size() + "/" + requiredPartiesToStart + "&7)");
+                message = ChatColor.translateAlternateColorCodes('&', "&6&lDONOR ONLY &7- " + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(joiningParty.getLeader())).getDisplayName() + "&7's team has joined the &6tournament&7. &e(" + activeParties.size() + "/" + requiredPartiesToStart + "&e)");
             }
 
-            Clickable clickable = new Clickable(message, ChatColor.translateAlternateColorCodes('&', "&cDonors &7can join during the tournament countdown."), "");
+            Clickable clickable = new Clickable(message, ChatColor.translateAlternateColorCodes('&', "&6Donors &7can join during the tournament countdown."), "");
             Bukkit.getOnlinePlayers().forEach(clickable::sendToPlayer);
             return;
         }
 
         String message;
         if (joiningParty.getMembers().size() == 1) {
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(joiningParty.getLeader()) + "&7 has joined the &5tournament&7. &7(" + activeParties.size() + "/" + requiredPartiesToStart + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(joiningParty.getLeader())).getDisplayName() + "&7 has joined the &6tournament&7. &e(" + activeParties.size() + "/" + requiredPartiesToStart + "&e)");
         } else if (joiningParty.getMembers().size() == 2) {
             Iterator<UUID> membersIterator = joiningParty.getMembers().iterator();
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + "&7 and &c" + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + "&7 have joined the &5tournament&7. &7(" + activeParties.size() * 2 + "/" + requiredPartiesToStart * 2 + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + "&7 and &c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + "&7 have joined the &6tournament&7. &e(" + activeParties.size() * 2 + "/" + requiredPartiesToStart * 2 + "&e)");
         } else {
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(joiningParty.getLeader()) + "&7's team has joined the &5tournament&7. &7(" + activeParties.size() + "/" + requiredPartiesToStart + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(joiningParty.getLeader())).getDisplayName() + "&7's team has joined the &6tournament&7. &e(" + activeParties.size() + "/" + requiredPartiesToStart + "&e)");
         }
         
         Clickable clickable = new Clickable(message, ChatColor.translateAlternateColorCodes('&', "&c&lCLICK &7to hide this message."), "/djm");
@@ -273,12 +273,12 @@ public class Tournament {
         String message;
         int multiplier = requiredPartySize < 3 ? requiredPartySize : 1;
         if (loserParty.getMembers().size() == 1) {
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(loserParty.getLeader()) + "&7 has been eliminated. &7(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(loserParty.getLeader())).getDisplayName() + "&7 has been eliminated. &e(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + ")");
         } else if (loserParty.getMembers().size() == 2) {
             Iterator<UUID> membersIterator = loserParty.getMembers().iterator();
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + "&7 and &c" + PatchedPlayerUtils.getFormattedName(membersIterator.next()) + " &7were eliminated. &7(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + "&7 and &c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(membersIterator.next())).getDisplayName() + " &7were eliminated. &e(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + ")");
         } else {
-            message = ChatColor.translateAlternateColorCodes('&', "&c" + PatchedPlayerUtils.getFormattedName(loserParty.getLeader()) + "&7's team has been eliminated. &7(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + "&7)");
+            message = ChatColor.translateAlternateColorCodes('&', "&c" + Bukkit.getPlayer(PatchedPlayerUtils.getFormattedName(loserParty.getLeader())).getDisplayName() + "&7's team has been eliminated. &e(" + activeParties.size() * multiplier + "/" + requiredPartiesToStart * multiplier + ")");
         }
 
         Clickable clickable = new Clickable(message, ChatColor.translateAlternateColorCodes('&', "&c&lCLICK &7to hide this message."), "/dem");
