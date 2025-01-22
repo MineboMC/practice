@@ -12,6 +12,9 @@ import net.minebo.practice.Practice;
 import net.minebo.practice.profile.elo.EloHandler;
 import net.minebo.practice.kit.kittype.KitType;
 import net.minebo.practice.util.menu.Button;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerButton extends Button {
 
@@ -19,7 +22,7 @@ public class PlayerButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return getColoredName(player) + ChatColor.WHITE + ChatColor.BOLD + " | "  + ChatColor.WHITE + "Statistics";
+        return player.getDisplayName() + ChatColor.GRAY + " | "  + ChatColor.WHITE + "Statistics";
     }
 
     @Override
@@ -30,12 +33,12 @@ public class PlayerButton extends Button {
 
         for (KitType kitType : KitType.getAllTypes()) {
             if (kitType.isSupportsRanked()) {
-                description.add(ChatColor.RED + kitType.getDisplayName() + ChatColor.GRAY + ": " + eloHandler.getElo(player, kitType));
+                description.add(kitType.getColoredDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + eloHandler.getElo(player, kitType));
             }
         }
 
         description.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------");
-        description.add(ChatColor.RED + "Global" + ChatColor.GRAY + ": " + eloHandler.getGlobalElo(player.getUniqueId()));
+        description.add(ChatColor.GOLD + "Global" + ChatColor.GRAY + ": " + ChatColor.WHITE + eloHandler.getGlobalElo(player.getUniqueId()));
         description.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "----------------");
 
         return description;
@@ -54,4 +57,35 @@ public class PlayerButton extends Button {
     private String getColoredName(Player player) {
         return player.getName();
     }
+
+    @Override
+    public ItemStack getButtonItem(Player player) {
+        // Create the item with the specified material, amount, and damage value
+        ItemStack buttonItem = new ItemStack(this.getMaterial(player), this.getAmount(player), (short) this.getDamageValue(player));
+        ItemMeta meta = buttonItem.getItemMeta();
+
+        // Set the display name
+        meta.setDisplayName(this.getName(player));
+
+        // Set the lore if available
+        List<String> description = this.getDescription(player);
+        if (description != null) {
+            meta.setLore(description);
+        }
+
+        // Check if the item is a player head (skull)
+        if (buttonItem.getType() == Material.SKULL_ITEM && buttonItem.getDurability() == 3) {
+            if (meta instanceof SkullMeta) {
+                SkullMeta skullMeta = (SkullMeta) meta;
+                skullMeta.setOwner(player.getName()); // Set the skull owner
+                buttonItem.setItemMeta(skullMeta);
+            }
+        } else {
+            // Set the generic item meta for non-skull items
+            buttonItem.setItemMeta(meta);
+        }
+
+        return buttonItem;
+    }
+
 }

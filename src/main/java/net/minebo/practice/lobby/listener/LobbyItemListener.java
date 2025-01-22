@@ -55,7 +55,7 @@ public final class LobbyItemListener implements Listener {
             handleSpectateMenu(player);
         } else if (item.isSimilar(LobbyItems.SPECTATE_RANDOM_ITEM)) {
             handleSpectateRandom(player);
-        } else if (item.isSimilar(LobbyItems.PLAYER_STATISTICS)) {
+        } else if (item.isSimilar(LobbyItems.getPlayerStatistics(player))) {
             handlePlayerStatistics(player);
         } else if (item.isSimilar(LobbyItems.UNFOLLOW_ITEM)) {
             handleUnfollow(player);

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minebo.practice.util.ItemBuilder;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public final class StatisticsMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Statistics";
+        return ChatColor.YELLOW.toString() + ChatColor.BOLD + "Statistics";
     }
 
     @Override

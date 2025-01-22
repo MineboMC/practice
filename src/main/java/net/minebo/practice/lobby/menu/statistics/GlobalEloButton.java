@@ -2,7 +2,10 @@ package net.minebo.practice.lobby.menu.statistics;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
 
+import net.minebo.basalt.api.BasaltAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +22,7 @@ public class GlobalEloButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return ChatColor.RED + "Global" + ChatColor.GRAY.toString() + ChatColor.BOLD + " | " + ChatColor.WHITE + "Top 10";
+        return ChatColor.GOLD + "Global" + ChatColor.GRAY.toString() + " | " + ChatColor.WHITE + "Top 10";
     }
 
     @Override
@@ -31,8 +34,14 @@ public class GlobalEloButton extends Button {
         int counter = 1;
 
         for (Entry<String, Integer> entry : eloHandler.topElo(null).entrySet()) {
-            String color = (counter <= 3 ? ChatColor.RED : ChatColor.GRAY).toString();
-            description.add(color + counter + ChatColor.GRAY.toString() + ChatColor.BOLD + " | " + entry.getKey() + ChatColor.GRAY + ": " + ChatColor.WHITE + entry.getValue());
+            String color = (counter <= 3 ? ChatColor.GREEN : ChatColor.GRAY).toString();
+            try {
+                description.add(color + counter + ChatColor.DARK_GRAY + ". " + ChatColor.translate(BasaltAPI.INSTANCE.quickFindProfile(Bukkit.getOfflinePlayer(entry.getKey()).getUniqueId()).get().getHighestGlobalRank().getColor()) + entry.getKey() + ChatColor.GRAY + ": " + ChatColor.WHITE + entry.getValue());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
 
             counter++;
         }
