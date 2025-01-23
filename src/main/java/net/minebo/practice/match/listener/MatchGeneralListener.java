@@ -211,6 +211,13 @@ public final class MatchGeneralListener implements Listener {
             if (victimTeam != null && victimTeam != damagerTeam && !isSpleef) {
                 return;
             }
+
+            if(victimTeam != null && damagerTeam != null){
+                if(victimTeam == damagerTeam){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
 
 

@@ -48,9 +48,20 @@ public final class KitSelectionListener implements Listener {
             ItemStack defaultKitItem = Kit.ofDefaultKit(kitType).createSelectionItem();
 
             if (kitType.equals(KitType.teamFight)) {
-                KitType bard = KitType.byId("BARD_HCF");
-                KitType diamond = KitType.byId("DIAMOND_HCF");
-                KitType archer = KitType.byId("ARCHER_HCF");
+
+                KitType bard;
+                KitType diamond;
+                KitType archer;
+
+                if(Practice.getInstance().getArenaHandler().getSchematic(event.getMatch().getArena().getSchematic()).isCitadelMap()){
+                    bard = KitType.byId("BARD_CITADEL");
+                    diamond = KitType.byId("DIAMOND_CITADEL");
+                    archer = KitType.byId("ARCHER_CITADEL");
+                } else {
+                    bard = KitType.byId("BARD_HCF");
+                    diamond = KitType.byId("DIAMOND_HCF");
+                    archer = KitType.byId("ARCHER_HCF");
+                }
 
                 Party party = Practice.getInstance().getPartyHandler().getParty(player);
 

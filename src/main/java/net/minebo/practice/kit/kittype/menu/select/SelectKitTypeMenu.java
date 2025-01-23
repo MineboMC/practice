@@ -59,10 +59,13 @@ public final class SelectKitTypeMenu extends Menu {
             }
             buttons.put(getSlot(x, y), new KitTypeButton(kitType, callback));
 
+            x++;
+
             if (x == 8) {
                 y++;
                 x = 1;
             }
+
         }
 
         Party party = Practice.getInstance().getPartyHandler().getParty(player);

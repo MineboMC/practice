@@ -200,19 +200,19 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
 
             if (ourTeam.isAlive(partnerUuid)) {
                 Player partnerPlayer = Bukkit.getPlayer(partnerUuid); // will never be null (or isAlive would've returned false)
-                double health = Math.round(partnerPlayer.getHealth()) / 2D;
+                double health = Math.round(partnerPlayer.getHealth());
                 int heals = healsLeft.getOrDefault(partnerUuid, 0);
 
                 ChatColor healthColor;
                 ChatColor healsColor;
 
-                if (health > 8) {
+                if (health > 16) {
                     healthColor = ChatColor.GREEN;
-                } else if (health > 6) {
+                } else if (health > 12) {
                     healthColor = ChatColor.YELLOW;
-                } else if (health > 4) {
+                } else if (health > 8) {
                     healthColor = ChatColor.GOLD;
-                } else if (health > 1) {
+                } else if (health > 2) {
                     healthColor = ChatColor.RED;
                 } else {
                     healthColor = ChatColor.DARK_RED;
@@ -231,7 +231,7 @@ final class MatchScoreGetter implements BiConsumer<Player, List<String>> {
                 }
 
                 namePrefix = "&a";
-                healthStr = healthColor.toString() + health + " *❤*" + ChatColor.GRAY;
+                healthStr = healthColor.toString() + health + " ❤" + ChatColor.GRAY;
 
                 if (healingMethod != null) {
                     healsStr = " &l⏐ " + healsColor.toString() + heals + " " + (heals == 1 ? healingMethod.getShortSingular() : healingMethod.getShortPlural());

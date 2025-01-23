@@ -109,7 +109,7 @@ public class RosterMenu extends PaginatedMenu {
                             next = PvPClasses.DIAMOND;
                         }
 
-                        party.message(player.getDisplayName() + ChatColor.YELLOW + " has set " + member.getDisplayName() +  ChatColor.YELLOW + "'s " + ChatColor.YELLOW + " kit to " + ChatColor.GRAY + next.getName() + ChatColor.YELLOW + ".");
+                        party.message(player.getDisplayName() + ChatColor.YELLOW + " has set " + member.getDisplayName() +  ChatColor.YELLOW + "'s" + ChatColor.YELLOW + " kit to " + ChatColor.GRAY + next.getName() + ChatColor.YELLOW + ".");
 
                         party.getKits().put(uuid, next);
 

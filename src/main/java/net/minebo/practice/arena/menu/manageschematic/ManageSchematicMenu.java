@@ -72,10 +72,11 @@ public final class ManageSchematicMenu extends Menu {
         buttons.put(24, new BooleanTraitButton<>(schematic, "BuildUHC Only", ArenaSchematic::setBuildUHCOnly, ArenaSchematic::isBuildUHCOnly, save));
         buttons.put(25, new BooleanTraitButton<>(schematic, "HCF Only", ArenaSchematic::setHCFOnly, ArenaSchematic::isHCFOnly, save));
         buttons.put(26, new BooleanTraitButton<>(schematic, "Team Fights Only", ArenaSchematic::setTeamFightsOnly, ArenaSchematic::isTeamFightsOnly, save));
-        buttons.put(27, new BooleanTraitButton<>(schematic, "Supports Sumo", ArenaSchematic::setSupportsSumo, ArenaSchematic::getSupportsSumo, save));
-        buttons.put(28, new BooleanTraitButton<>(schematic, "Supports LMS", ArenaSchematic::setSupportsLMS, ArenaSchematic::getSupportsLMS, save));
-        buttons.put(29, new BooleanTraitButton<>(schematic, "Supports Death Race", ArenaSchematic::setSupportsDeathRace, ArenaSchematic::getSupportsDeathRace, save));
-        buttons.put(30, new BooleanTraitButton<>(schematic, "Supports OITC", ArenaSchematic::setSupportsOITC, ArenaSchematic::getSupportsOITC, save));
+        buttons.put(27, new BooleanTraitButton<>(schematic, "Citadel Map", ArenaSchematic::setCitadelMap, ArenaSchematic::isCitadelMap, save));
+        buttons.put(28, new BooleanTraitButton<>(schematic, "Supports Sumo", ArenaSchematic::setSupportsSumo, ArenaSchematic::getSupportsSumo, save));
+        buttons.put(29, new BooleanTraitButton<>(schematic, "Supports LMS", ArenaSchematic::setSupportsLMS, ArenaSchematic::getSupportsLMS, save));
+        buttons.put(30, new BooleanTraitButton<>(schematic, "Supports Death Race", ArenaSchematic::setSupportsDeathRace, ArenaSchematic::getSupportsDeathRace, save));
+        buttons.put(31, new BooleanTraitButton<>(schematic, "Supports OITC", ArenaSchematic::setSupportsOITC, ArenaSchematic::getSupportsOITC, save));
 
         return buttons;
     }

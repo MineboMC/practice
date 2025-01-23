@@ -59,6 +59,14 @@ public final class ArenaSchematic {
 
 
     /**
+     * If this schematic is a teamfight schematic this will
+     * designate if it's a Citadel map (no pearls) or a regular map.
+     */
+
+    @Getter @Setter private boolean isCitadelMap = false;
+
+
+    /**
      * If this schematic can be only be used for Sumo matches
      * Some schematics are built for specifically Sumo fights
      */
