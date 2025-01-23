@@ -212,10 +212,6 @@ public final class Match {
     }
 
     public void endMatch(MatchEndReason reason) {
-        this.endMatch(reason, false);
-    }
-
-    public void endMatch(MatchEndReason reason, boolean botMatch) {
         // prevent duplicate endings
         if (state == MatchState.ENDING || state == MatchState.TERMINATED) {
             return;
@@ -239,6 +235,8 @@ public final class Match {
 
             //Post Match Message
 
+            messageAll(ChatColor.YELLOW + "Match ended.");
+
             Bukkit.getPluginManager().callEvent(new MatchEndEvent(this));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -246,64 +244,10 @@ public final class Match {
 
         int delayTicks = MATCH_END_DELAY_SECONDS * 20;
         if (JavaPlugin.getProvidingPlugin(this.getClass()).isEnabled()) {
-            Bukkit.getScheduler().runTaskLater(Practice.getInstance(), this::customTerminate, delayTicks);
+            Bukkit.getScheduler().runTaskLater(Practice.getInstance(), this::terminateMatch, delayTicks);
         } else {
-            if (botMatch) {
-                this.customTerminate();
-            } else {
-                this.terminateMatch();
-            }
+            this.terminateMatch();
         }
-    }
-
-    private void customTerminate() {
-        // prevent double terminations
-        if (state == MatchState.TERMINATED) {
-            return;
-        }
-
-        state = MatchState.TERMINATED;
-
-        // if the match ends before the countdown ends
-        // we have to set this to avoid a NPE in Date#from
-        if (startedAt == null) {
-            startedAt = new Date();
-        }
-
-        // if endedAt wasn't set before (if terminateMatch was called directly)
-        // we want to make sure we set an ending time. Otherwise we keep the
-        // technically more accurate time set in endMatch
-        if (endedAt == null) {
-            endedAt = new Date();
-        }
-
-        MatchHandler matchHandler = Practice.getInstance().getMatchHandler();
-        LobbyHandler lobbyHandler = Practice.getInstance().getLobbyHandler();
-
-        Map<UUID, Match> playingCache = matchHandler.getPlayingMatchCache();
-        Map<UUID, Match> spectateCache = matchHandler.getSpectatingMatchCache();
-
-        if (kitType.isBuildingAllowed()) arena.restore();
-        Practice.getInstance().getArenaHandler().releaseArena(arena);
-        matchHandler.removeMatch(this);
-
-        getTeams().forEach(team -> team.getAllMembers().forEach(player -> {
-            if (team.isAlive(player)) {
-                playingCache.remove(player);
-                spectateCache.remove(player);
-                if (Bukkit.getPlayer(player) != null) {
-                    lobbyHandler.returnToLobby(Bukkit.getPlayer(player));
-                }
-            }
-        }));
-
-        spectators.forEach(player -> {
-            if (Bukkit.getPlayer(player) != null) {
-                playingCache.remove(player);
-                spectateCache.remove(player);
-                lobbyHandler.returnToLobby(Bukkit.getPlayer(player));
-            }
-        });
     }
 
     private void terminateMatch() {

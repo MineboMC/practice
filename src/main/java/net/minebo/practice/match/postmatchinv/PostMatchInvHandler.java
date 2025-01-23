@@ -43,13 +43,17 @@ public final class PostMatchInvHandler {
         Map<UUID, PostMatchPlayer> matchPlayers = match.getPostMatchPlayers();
 
         for (MatchTeam team : match.getTeams()) {
-            for (UUID member : team.getAliveMembers()) {
+            for (UUID member : team.getAllMembers()) {
                 playerData.put(member, matchPlayers);
+                System.out.println("Saved player data for " + Bukkit.getPlayer(member).getName());
             }
         }
 
         for (UUID spectator : match.getSpectators()) {
-            playerData.put(spectator, matchPlayers);
+            if(!playerData.containsKey(spectator)) {
+                playerData.put(spectator, matchPlayers);
+                System.out.println("Saved player data for " + Bukkit.getPlayer(spectator).getName());
+            }
         }
     }
 
@@ -166,17 +170,11 @@ public final class PostMatchInvHandler {
 
     private void writeTeamInvMessages(MatchTeam team, Map<UUID, Object[]> messageMap, Object[] messages) {
         for (UUID member : team.getAllMembers()) {
-            // on this containsKey check:
-            // we only want to send messages to players who are alive or were on this team in the match
-            // we always add messages from the least specific (ex generic for spectators)
-            // to most specific (ex per team messages), so checking if they're already added is a good
-            // way to check if they're going to get a message.
-            // we can't just use getAllMembers because players could've left and started a new fight
-            if (messageMap.containsKey(member) || team.isAlive(member)) {
-                messageMap.put(member, messages);
-            }
+            // Remove the alive check to ensure all team members are included.
+            messageMap.put(member, messages);
         }
     }
+
 
     private void writeSpecInvMessages(Match match, Map<UUID, Object[]> messageMap, Object[] messages) {
         for (UUID spectator : match.getSpectators()) {

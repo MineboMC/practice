@@ -10,6 +10,7 @@ import net.minebo.practice.util.InventoryUtils;
 import net.minebo.practice.util.menu.Button;
 import net.minebo.practice.util.menu.Menu;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,7 +26,7 @@ public final class PostMatchMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return "Inventory of " + Practice.getInstance().getUuidCache().name(target.getPlayerUuid());
+        return "Inventory of " + Bukkit.getPlayer(target.getPlayerUuid()).getDisplayName();
     }
 
     @Override

@@ -112,7 +112,7 @@ public class EventHandler {
                     }
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         String[] hostMessage = {
-                                ChatColor.GRAY + "The event " + ChatColor.YELLOW + eventType.getName() + ChatColor.GRAY + " " + (forceStart ? "has started by an administrator." : message) + ChatColor.WHITE + " (" + Event.activePlayers.size() + "/" + eventType.getMaxPlayers() + ")",
+                                ChatColor.GRAY + "The event " + ChatColor.GOLD + eventType.getName() + ChatColor.GRAY + " " + (forceStart ? "has started by an administrator." : message) + ChatColor.YELLOW + " (" + Event.activePlayers.size() + "/" + eventType.getMaxPlayers() + ")",
                         };
                         p.sendMessage(hostMessage);
                     }
@@ -134,7 +134,7 @@ public class EventHandler {
                 if (countdown[0] % 15 == 0) {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         FancyMessage message = new FancyMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', ChatColor.GRAY + "Click " + ChatColor.GOLD + "here " + ChatColor.GRAY + "or type " + ChatColor.GOLD + "&l/event join" + ChatColor.GRAY + ". (" + Event.activePlayers.size() + "/" + eventType.getMaxPlayers() + ")")).command("/event join").tooltip(org.bukkit.ChatColor.GREEN + "Click to join!");
-                        p.sendMessage(hostPlayer.getDisplayName() + ChatColor.GRAY + " is hosting the "+ ChatColor.YELLOW + eventType.getName() + ChatColor.GRAY + " event!");
+                        p.sendMessage(hostPlayer.getDisplayName() + ChatColor.GRAY + " is hosting the "+ ChatColor.GOLD + eventType.getName() + ChatColor.GRAY + " event!");
                         message.send(p);
                     }
                 }

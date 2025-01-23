@@ -6,6 +6,7 @@ import net.minebo.practice.Practice;
 import net.minebo.practice.kit.kittype.HealingMethod;
 import net.minebo.practice.util.menu.Button;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,8 +37,8 @@ final class PostMatchHealsLeftButton extends Button {
     @Override
     public List<String> getDescription(Player player) {
         return ImmutableList.of(
-            ChatColor.YELLOW + Practice.getInstance().getUuidCache().name(this.player) + " had " + healsRemaining + " " + (healsRemaining == 1 ? healingMethod.getLongSingular() : healingMethod.getLongPlural()) + " left.",
-            ChatColor.YELLOW + Practice.getInstance().getUuidCache().name(this.player) + " missed " + missedHeals + " health potion" + (missedHeals == 1 ? "." : "s.")
+                ChatColor.YELLOW + Bukkit.getPlayer(this.player).getDisplayName() + " had " + healsRemaining + " " + (healsRemaining == 1 ? healingMethod.getLongSingular() : healingMethod.getLongPlural()) + " left.",
+                ChatColor.YELLOW + Bukkit.getPlayer(this.player).getDisplayName() + " missed " + missedHeals + " health potion" + (missedHeals == 1 ? "." : "s.")
         );
     }
 

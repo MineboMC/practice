@@ -3,6 +3,7 @@ package net.minebo.practice.match.postmatchinv.listener;
 import net.minebo.practice.Practice;
 import net.minebo.practice.match.MatchTeam;
 import net.minebo.practice.match.event.MatchCountdownStartEvent;
+import net.minebo.practice.match.event.MatchEndEvent;
 import net.minebo.practice.match.event.MatchTerminateEvent;
 import net.minebo.practice.match.postmatchinv.PostMatchInvHandler;
 

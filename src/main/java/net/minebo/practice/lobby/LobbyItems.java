@@ -26,13 +26,13 @@ public final class LobbyItems {
     public static final ItemStack PLAYER_STATISTICS = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
 
     static {
-        ItemUtils.setDisplayName(SPECTATE_RANDOM_ITEM,  RED + "Spectate Random Match");
-        ItemUtils.setDisplayName(SPECTATE_MENU_ITEM,  RED + "Spectate Menu");
-        ItemUtils.setDisplayName(DISABLE_SPEC_MODE_ITEM, RED + "Leave Spectator Mode");
-        ItemUtils.setDisplayName(ENABLE_SPEC_MODE_ITEM, RED + "Enable Spectator Mode");
-        ItemUtils.setDisplayName(MANAGE_ITEM, RED + "Manage PotPvP");
-        ItemUtils.setDisplayName(UNFOLLOW_ITEM, RED + "Stop Following");
-        ItemUtils.setDisplayName(PLAYER_STATISTICS, RED + "Statistics");
+        ItemUtils.setDisplayName(SPECTATE_RANDOM_ITEM,  YELLOW + "Spectate Random Match");
+        ItemUtils.setDisplayName(SPECTATE_MENU_ITEM,  GREEN + "Spectate Menu");
+        ItemUtils.setDisplayName(DISABLE_SPEC_MODE_ITEM, AQUA + "Leave Spectator Mode");
+        ItemUtils.setDisplayName(ENABLE_SPEC_MODE_ITEM, AQUA + "Enable Spectator Mode");
+        ItemUtils.setDisplayName(MANAGE_ITEM, GREEN + "Manage PotPvP");
+        ItemUtils.setDisplayName(UNFOLLOW_ITEM, AQUA + "Stop Following");
+        ItemUtils.setDisplayName(PLAYER_STATISTICS, LIGHT_PURPLE + "Statistics");
     }
 
     public ItemStack getPlayerStatistics(Player player) {

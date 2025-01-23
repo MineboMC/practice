@@ -2,7 +2,9 @@ package net.minebo.practice.command.match;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.practice.Practice;
 import net.minebo.practice.match.Match;
 import net.minebo.practice.match.MatchHandler;
@@ -20,14 +22,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class SpectateCommand extends BaseCommand {
+public class  SpectateCommand extends BaseCommand {
 
     private static final int SPECTATE_COOLDOWN_SECONDS = 2;
     private static final Map<UUID, Long> cooldowns = new HashMap<>();
 
     @CommandAlias("spectate|spec")
     @Description("Spectate a player's match.")
-    public void spectate(Player sender, Player target) {
+    @CommandCompletion("@players")
+    public void spectate(Player sender, OnlinePlayer target) {
         if (sender == target) {
             sender.sendMessage(ChatColor.RED + "You cannot spectate yourself.");
             return;
@@ -41,10 +44,10 @@ public class SpectateCommand extends BaseCommand {
         MatchHandler matchHandler = Practice.getInstance().getMatchHandler();
         SettingHandler settingHandler = Practice.getInstance().getSettingHandler();
 
-        Match targetMatch = matchHandler.getMatchPlayingOrSpectating(target);
+        Match targetMatch = matchHandler.getMatchPlayingOrSpectating(target.getPlayer());
 
         if (targetMatch == null) {
-            sender.sendMessage(ChatColor.RED + target.getName() + " is not in a match.");
+            sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " is not in a match.");
             return;
         }
 
@@ -52,11 +55,11 @@ public class SpectateCommand extends BaseCommand {
         boolean bypassesSpectating = false;
 
         // only check the seting if the target is actually playing in the match
-        if (!bypassesSpectating && (targetMatch.getTeam(target.getUniqueId()) != null && !settingHandler.getSetting(target, Setting.ALLOW_SPECTATORS))) {
+        if (!bypassesSpectating && (targetMatch.getTeam(target.getPlayer().getUniqueId()) != null && !settingHandler.getSetting(target.getPlayer(), Setting.ALLOW_SPECTATORS))) {
             if (sender.isOp() || sender.hasPermission("potpvp.spectate")) {
-                sender.sendMessage(ChatColor.RED + "Bypassing " + target.getName() + "'s no spectators preference...");
+                sender.sendMessage(ChatColor.RED + "Bypassing " + target.getPlayer().getName() + "'s no spectators preference...");
             } else {
-                sender.sendMessage(ChatColor.RED + target.getName() + " doesn't allow spectators at the moment.");
+                sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " doesn't allow spectators at the moment.");
                 return;
             }
         }
@@ -83,8 +86,8 @@ public class SpectateCommand extends BaseCommand {
 
         // /spectate looks up matches being played OR watched by the target,
         // so we can only target them if they're not spectating
-        if (!targetMatch.isSpectator(target.getUniqueId())) {
-            teleportTo = target;
+        if (!targetMatch.isSpectator(target.getPlayer().getUniqueId())) {
+            teleportTo = target.getPlayer();
         }
 
         if (Validation.canUseSpectateItemIgnoreMatchSpectating(sender)) {

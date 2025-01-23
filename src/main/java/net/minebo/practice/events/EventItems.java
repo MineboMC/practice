@@ -11,11 +11,11 @@ import static org.bukkit.ChatColor.*;
 public final class EventItems {
 
     public ItemStack getEventItem() {
-        return ItemBuilder.of(Material.EMERALD).name(GRAY.toString() + "» " + YELLOW + BOLD.toString() + "Events" + GRAY.toString() + " «").build();
+        return ItemBuilder.of(Material.EMERALD).name(GREEN + "Host an Event").build();
     }
 
     public ItemStack getLeaveItem(){
-        return ItemBuilder.of(Material.RED_ROSE).name(GRAY.toString() + "» " + RED + BOLD.toString() + "Leave" + GRAY.toString() + " «").build();
+        return ItemBuilder.of(Material.RED_ROSE).name(RED + "Leave").build();
     }
 
 }
