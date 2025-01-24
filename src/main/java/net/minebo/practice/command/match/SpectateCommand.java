@@ -31,6 +31,11 @@ public class  SpectateCommand extends BaseCommand {
     @Description("Spectate a player's match.")
     @CommandCompletion("@players")
     public void spectate(Player sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         if (sender == target) {
             sender.sendMessage(ChatColor.RED + "You cannot spectate yourself.");
             return;

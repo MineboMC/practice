@@ -1,11 +1,14 @@
 package net.minebo.practice.events;
 
+import net.minebo.practice.Practice;
 import net.minebo.practice.events.enums.EventPlayerState;
 import net.minebo.practice.events.enums.EventState;
 import net.minebo.practice.events.enums.EventType;
 import lombok.Getter;
 import lombok.Setter;
 import net.minebo.practice.kit.kittype.KitType;
+import net.minebo.practice.lobby.LobbyUtils;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 
@@ -42,6 +45,9 @@ public class Event {
         if (spectators.contains(player)) {
             spectators.remove(player);
         }
+
+        Practice.getInstance().getLobbyHandler().returnToLobby(Bukkit.getPlayer(player));
+
     }
 
     public void setState(EventState state) {

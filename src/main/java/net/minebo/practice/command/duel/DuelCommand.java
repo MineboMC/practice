@@ -32,6 +32,10 @@ public final class DuelCommand extends BaseCommand {
     @CommandCompletion("@players")
     public void duel(CommandSender sender, OnlinePlayer target) {
 
+        if (target == null) {
+            return;
+        }
+
         if (sender == target.getPlayer()) {
             sender.sendMessage(ChatColor.RED + "You can't duel yourself!");
             return;

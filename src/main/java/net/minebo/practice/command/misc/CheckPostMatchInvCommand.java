@@ -25,6 +25,11 @@ public class CheckPostMatchInvCommand extends BaseCommand {
     @Description("View match data.")
     @CommandCompletion("@players")
     public void checkPostMatchInv(CommandSender sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         PostMatchInvHandler postMatchInvHandler = Practice.getInstance().getPostMatchInvHandler();
         Map<UUID, PostMatchPlayer> players = postMatchInvHandler.getPostMatchData(Bukkit.getPlayer(sender.getName()).getUniqueId());
         PostMatchPlayer inv = players.get(target.getPlayer().getUniqueId());

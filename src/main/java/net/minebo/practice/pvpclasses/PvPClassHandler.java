@@ -7,6 +7,7 @@ import net.minebo.practice.match.Match;
 import net.minebo.practice.pvpclasses.event.BardRestoreEvent;
 import net.minebo.practice.pvpclasses.pvpclasses.ArcherClass;
 import net.minebo.practice.pvpclasses.pvpclasses.BardClass;
+import net.minebo.practice.pvpclasses.pvpclasses.RogueClass;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ public class PvPClassHandler extends BukkitRunnable implements Listener {
     public PvPClassHandler() {
         pvpClasses.add(new ArcherClass());
         pvpClasses.add(new BardClass());
+        pvpClasses.add(new RogueClass());
 
         for (PvPClass pvpClass : pvpClasses) {
             Bukkit.getServer().getPluginManager().registerEvents(pvpClass, Practice.getInstance());

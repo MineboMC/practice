@@ -27,6 +27,11 @@ public class EloSetCommands extends BaseCommand {
     @CommandCompletion("@players @kittypes")
     @Syntax("<player> <kitType> <elo>")
     public void eloSetSolo(CommandSender sender, OnlinePlayer target, String type, Integer newElo) {
+
+        if (target == null) {
+            return;
+        }
+
         KitType kitType = KitType.byId(type);
         EloHandler eloHandler = Practice.getInstance().getEloHandler();
         eloHandler.setElo(target.getPlayer(), kitType, newElo);
@@ -39,6 +44,11 @@ public class EloSetCommands extends BaseCommand {
     @CommandCompletion("@players @kittypes")
     @Syntax("<player> <kitType> <elo>")
     public void eloSetTeam(CommandSender sender, OnlinePlayer target, String type, Integer newElo) {
+
+        if (target == null) {
+            return;
+        }
+
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
         EloHandler eloHandler = Practice.getInstance().getEloHandler();
         KitType kitType = KitType.byId(type);

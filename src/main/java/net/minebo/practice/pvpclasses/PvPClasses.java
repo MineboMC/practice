@@ -8,7 +8,8 @@ import org.bukkit.Material;
 public enum PvPClasses {
     DIAMOND(Material.DIAMOND_CHESTPLATE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE),
     BARD(Material.GOLD_CHESTPLATE, 1, 2, 2),
-    ARCHER(Material.LEATHER_CHESTPLATE, 1, 2, 2);
+    ARCHER(Material.LEATHER_CHESTPLATE, 1, 2, 2),
+    ROGUE(Material.CHAINMAIL_CHESTPLATE, 1, 2, 2);
 
     @Getter private final Material icon;
     @Getter private final int maxForFive;

@@ -2,6 +2,7 @@ package net.minebo.practice.command.silent;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import net.minebo.practice.Practice;
 import net.minebo.practice.profile.follow.FollowHandler;
 import net.minebo.practice.match.MatchHandler;
@@ -18,7 +19,12 @@ public class FollowCommand extends BaseCommand {
     @Description("Follow a player.")
     @CommandPermission("potpvp.staff")
     @CommandCompletion("@players")
-    public void follow(Player sender, Player target) {
+    public void follow(Player sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         if (!Validation.canFollowSomeone(sender)) {
             return;
         }
@@ -30,11 +36,11 @@ public class FollowCommand extends BaseCommand {
         if (sender == target) {
             sender.sendMessage(ChatColor.RED + "No, you can't follow yourself.");
             return;
-        } else if (!settingHandler.getSetting(target, Setting.ALLOW_SPECTATORS)) {
+        } else if (!settingHandler.getSetting(target.getPlayer(), Setting.ALLOW_SPECTATORS)) {
             if (sender.isOp()) {
-                sender.sendMessage(ChatColor.RED + "Bypassing " + target.getName() + "'s no spectators preference...");
+                sender.sendMessage(ChatColor.RED + "Bypassing " + target.getPlayer().getName() + "'s no spectators preference...");
             } else {
-                sender.sendMessage(ChatColor.RED + target.getName() + " doesn't allow spectators at the moment.");
+                sender.sendMessage(ChatColor.RED + target.getPlayer().getName() + " doesn't allow spectators at the moment.");
                 return;
             }
         }
@@ -45,6 +51,6 @@ public class FollowCommand extends BaseCommand {
             matchHandler.getMatchSpectating(sender).removeSpectator(sender);
         }
 
-        followHandler.startFollowing(sender, target);
+        followHandler.startFollowing(sender, target.getPlayer());
     }
 }

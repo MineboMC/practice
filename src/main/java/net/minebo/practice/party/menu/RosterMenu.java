@@ -64,9 +64,31 @@ public class RosterMenu extends PaginatedMenu {
                 public List<String> getDescription(Player player) {
                     List<String> description = new ArrayList<>();
 
+                    List<PvPClasses> kits = Arrays.asList(PvPClasses.values());
+                    int index = kits.indexOf(selected);
+                    PvPClasses next = null;
+
+                    int times = 0;
+                    while (next == null && times <= 50) {
+                        times++;
+                        if (index+1 < kits.size()) {
+                            next = kits.get(index+1);
+                            if (!(next.allowed(party))) {
+                                next = null;
+                                index++;
+                            }
+                        } else {
+                            index = -1;
+                        }
+                    }
+
+                    if (next == null) {
+                        next = PvPClasses.DIAMOND;
+                    }
+
                     for (PvPClasses kit : PvPClasses.values()) {
                         if (kit == selected) {
-                            description.add(ChatColor.GREEN + "> " + kit.getName());
+                            description.add(ChatColor.GREEN + " ► " + colorClassName(kit.getName()));
                         } else {
                             if (kit.allowed(party)) {
                                 description.add(ChatColor.GRAY + kit.getName());
@@ -74,6 +96,11 @@ public class RosterMenu extends PaginatedMenu {
                                 description.add(ChatColor.RED + ChatColor.STRIKETHROUGH.toString() + kit.getName());
                             }
                         }
+                    }
+
+                    if(party.isLeader(uuid)) {
+                        description.add("");
+                        description.add(ChatColor.GREEN + "Click to switch to " + colorClassName(next.getName()));
                     }
 
                     return description;
@@ -109,7 +136,7 @@ public class RosterMenu extends PaginatedMenu {
                             next = PvPClasses.DIAMOND;
                         }
 
-                        party.message(player.getDisplayName() + ChatColor.YELLOW + " has set " + member.getDisplayName() +  ChatColor.YELLOW + "'s" + ChatColor.YELLOW + " kit to " + ChatColor.GRAY + next.getName() + ChatColor.YELLOW + ".");
+                        party.message(player.getDisplayName() + ChatColor.YELLOW + " has set " + member.getDisplayName() +  ChatColor.YELLOW + "'s" + ChatColor.YELLOW + " kit to " + ChatColor.GRAY + colorClassName(next.getName()) + ChatColor.YELLOW + ".");
 
                         party.getKits().put(uuid, next);
 
@@ -133,5 +160,24 @@ public class RosterMenu extends PaginatedMenu {
     @Override
     public int getMaxItemsPerPage(Player player) {
         return 9*4;
+    }
+
+    public String colorClassName(String className) {
+        switch (className) {
+            case "Rogue": {
+                return ChatColor.DARK_GRAY + "Rogue";
+            }
+            case "Diamond": {
+                return ChatColor.AQUA + "Diamond";
+            }
+            case "Bard": {
+                return ChatColor.YELLOW + "Bard";
+            }
+            case "Archer": {
+                return ChatColor.GOLD + "Archer";
+            }
+        }
+
+        return "";
     }
 }

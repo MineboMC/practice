@@ -2,6 +2,7 @@ package net.minebo.practice.party;
 
 import net.minebo.practice.Practice;
 import net.minebo.practice.util.ItemUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -25,17 +26,17 @@ public final class PartyItems {
 
     static {
         ItemUtils.setDisplayName(LEAVE_PARTY_ITEM, RED + "Leave Party");
-        ItemUtils.setDisplayName(ASSIGN_CLASSES, RED + "HCF Kits");
-        ItemUtils.setDisplayName(START_TEAM_SPLIT_ITEM, RED + "Start Team Split");
-        ItemUtils.setDisplayName(START_FFA_ITEM, RED + "Start Party FFA");
-        ItemUtils.setDisplayName(OTHER_PARTIES_ITEM, RED + "Other Parties");
+        ItemUtils.setDisplayName(ASSIGN_CLASSES, LIGHT_PURPLE + "HCF Kits");
+        ItemUtils.setDisplayName(START_TEAM_SPLIT_ITEM, GREEN + "Start Team Split");
+        ItemUtils.setDisplayName(START_FFA_ITEM, GOLD + "Start Party FFA");
+        ItemUtils.setDisplayName(OTHER_PARTIES_ITEM, YELLOW + "Other Parties");
     }
 
     public static ItemStack icon(Party party) {
         ItemStack item = new ItemStack(ICON_TYPE);
 
         String leaderName = Practice.getInstance().getUuidCache().name(party.getLeader());
-        String displayName = LEFT_ARROW + RED + BOLD + leaderName + RED + "'s Party" + RIGHT_ARROW;
+        String displayName = ChatColor.AQUA + "Party Info";
 
         ItemUtils.setDisplayName(item, displayName);
         return item;

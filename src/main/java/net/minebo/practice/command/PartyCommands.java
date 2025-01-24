@@ -199,6 +199,10 @@ public class PartyCommands extends BaseCommand {
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
         Party party = partyHandler.getParty(sender);
 
+        if (target == null) {
+            return;
+        }
+
         if (sender == target) {
             sender.sendMessage(ChatColor.RED + "You cannot invite yourself to your own party.");
             return;
@@ -245,6 +249,11 @@ public class PartyCommands extends BaseCommand {
     @Description("Join a party.")
     @CommandCompletion("@players")
     public void partyJoin(Player sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         PartyHandler partyHandler = Practice.getInstance().getPartyHandler();
         Party targetParty = partyHandler.getParty(target.getPlayer());
 
@@ -281,6 +290,11 @@ public class PartyCommands extends BaseCommand {
     @Description("Kick a player from a party.")
     @CommandCompletion("@players")
     public void kick(Player sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         Party party = Practice.getInstance().getPartyHandler().getParty(sender);
 
         if (party == null) {
@@ -300,6 +314,9 @@ public class PartyCommands extends BaseCommand {
     @Description("Promote a player in your party to leader.")
     @CommandCompletion("@players")
     public void leader(Player sender, OnlinePlayer target) {
+        if (target == null) {
+            return;
+        }
         Party party = Practice.getInstance().getPartyHandler().getParty(sender);
 
         if (party == null) {

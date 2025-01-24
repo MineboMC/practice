@@ -39,7 +39,7 @@ public final class EventSelectMenu extends Menu {
 
     @Override
     public String getTitle(Player player) {
-        return ChatColor.BLUE.toString() + ChatColor.BOLD + title + "...";
+        return ChatColor.YELLOW.toString() + ChatColor.BOLD + title + "...";
     }
 
     @Override

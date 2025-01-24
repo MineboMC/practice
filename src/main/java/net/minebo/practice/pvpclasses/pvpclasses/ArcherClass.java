@@ -75,6 +75,14 @@ public class ArcherClass extends PvPClass {
             }
 
             Player shooter = (Player) arrow.getShooter();
+
+            if (Practice.getInstance().getMatchHandler().isPlayingMatch(shooter)){
+                if(Practice.getInstance().getMatchHandler().getMatchPlaying(shooter).getTeam(shooter.getUniqueId()).getAliveMembers().contains(player.getUniqueId())){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
             float pullback = arrow.getMetadata("Pullback").get(0).asFloat();
 
             if (!PvPClassHandler.hasKitOn(shooter, this)) {

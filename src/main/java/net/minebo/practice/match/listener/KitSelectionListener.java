@@ -52,15 +52,18 @@ public final class KitSelectionListener implements Listener {
                 KitType bard;
                 KitType diamond;
                 KitType archer;
+                KitType rogue;
 
                 if(Practice.getInstance().getArenaHandler().getSchematic(event.getMatch().getArena().getSchematic()).isCitadelMap()){
                     bard = KitType.byId("BARD_CITADEL");
                     diamond = KitType.byId("DIAMOND_CITADEL");
                     archer = KitType.byId("ARCHER_CITADEL");
+                    rogue = KitType.byId("ROGUE_CITADEL");
                 } else {
                     bard = KitType.byId("BARD_HCF");
                     diamond = KitType.byId("DIAMOND_HCF");
                     archer = KitType.byId("ARCHER_HCF");
+                    rogue = KitType.byId("ROGUE_HCF");
                 }
 
                 Party party = Practice.getInstance().getPartyHandler().getParty(player);
@@ -74,6 +77,8 @@ public final class KitSelectionListener implements Listener {
                         Kit.ofDefaultKit(diamond).apply(player);
                     } else if (kit == PvPClasses.BARD) {
                         Kit.ofDefaultKit(bard).apply(player);
+                    } else if (kit == PvPClasses.ROGUE) {
+                        Kit.ofDefaultKit(rogue).apply(player);
                     } else {
                         Kit.ofDefaultKit(archer).apply(player);
                     }

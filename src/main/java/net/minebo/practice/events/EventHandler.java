@@ -2,7 +2,8 @@ package net.minebo.practice.events;
 
 import mkremins.fanciful.FancyMessage;
 import net.minebo.practice.Practice;
-import net.minebo.practice.misc.Lang;
+import net.minebo.practice.events.listener.EventItemListener;
+import net.minebo.practice.events.listener.EventListener;
 import net.minebo.practice.arena.Arena;
 import net.minebo.practice.arena.ArenaHandler;
 import net.minebo.practice.events.enums.EventPlayerState;
@@ -49,6 +50,7 @@ public class EventHandler {
 
     public EventHandler() {
         Practice.getInstance().getServer().getPluginManager().registerEvents(new EventListener(), Practice.getInstance());
+        Practice.getInstance().getServer().getPluginManager().registerEvents(new EventItemListener(), Practice.getInstance());
 
         Practice.getInstance().getServer().getPluginManager().registerEvents(new SumoListener(), Practice.getInstance());
         Practice.getInstance().getServer().getPluginManager().registerEvents(new LMSListener(), Practice.getInstance());
@@ -133,7 +135,7 @@ public class EventHandler {
 
                 if (countdown[0] % 15 == 0) {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                        FancyMessage message = new FancyMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', ChatColor.GRAY + "Click " + ChatColor.GOLD + "here " + ChatColor.GRAY + "or type " + ChatColor.GOLD + "&l/event join" + ChatColor.GRAY + ". (" + Event.activePlayers.size() + "/" + eventType.getMaxPlayers() + ")")).command("/event join").tooltip(org.bukkit.ChatColor.GREEN + "Click to join!");
+                        FancyMessage message = new FancyMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&', ChatColor.GRAY + "Click " + ChatColor.GOLD + "here " + ChatColor.GRAY + "or type " + ChatColor.GOLD + "&l/event join" + ChatColor.GRAY + ". " + ChatColor.YELLOW + "(" + Event.activePlayers.size() + "/" + eventType.getMaxPlayers() + ")")).command("/event join").tooltip(org.bukkit.ChatColor.GREEN + "Click to join!");
                         p.sendMessage(hostPlayer.getDisplayName() + ChatColor.GRAY + " is hosting the "+ ChatColor.GOLD + eventType.getName() + ChatColor.GRAY + " event!");
                         message.send(p);
                     }

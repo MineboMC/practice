@@ -11,7 +11,7 @@ import static org.bukkit.ChatColor.*;
 public final class EventItems {
 
     public ItemStack getEventItem() {
-        return ItemBuilder.of(Material.EMERALD).name(GREEN + "Host an Event").build();
+        return ItemBuilder.of(Material.EMERALD).name(GREEN + "Host An Event").build();
     }
 
     public ItemStack getLeaveItem(){

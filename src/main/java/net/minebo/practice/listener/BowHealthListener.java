@@ -26,6 +26,13 @@ public final class BowHealthListener implements Listener {
         Player hit = (Player) event.getEntity();
         Player damager = PlayerUtils.getDamageSource(event.getDamager());
 
+        if (Practice.getInstance().getMatchHandler().isPlayingMatch(damager)){
+            if(Practice.getInstance().getMatchHandler().getMatchPlaying(damager).getTeam(damager.getUniqueId()).getAliveMembers().contains(hit.getUniqueId())){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
         if (damager != null) {
             Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
                 // in case the player died because of this hit

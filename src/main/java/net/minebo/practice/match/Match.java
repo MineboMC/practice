@@ -180,7 +180,7 @@ public final class Match {
 
         new BukkitRunnable() {
 
-            int countdownTimeRemaining = kitType.getId().equals("SUMO") ? 5 : 5;
+            int countdownTimeRemaining = 5;
 
             public void run() {
                 if (state != MatchState.COUNTDOWN) {
@@ -217,6 +217,10 @@ public final class Match {
             return;
         }
 
+        //Post Match Message
+
+        messageAll(ChatColor.YELLOW + "Match ended.");
+
         state = MatchState.ENDING;
         endedAt = new Date();
         endReason = reason;
@@ -232,10 +236,6 @@ public final class Match {
                     postMatchPlayers.computeIfAbsent(playerUuid, v -> new PostMatchPlayer(player, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0)));
                 }
             }
-
-            //Post Match Message
-
-            messageAll(ChatColor.YELLOW + "Match ended.");
 
             Bukkit.getPluginManager().callEvent(new MatchEndEvent(this));
         } catch (Exception ex) {

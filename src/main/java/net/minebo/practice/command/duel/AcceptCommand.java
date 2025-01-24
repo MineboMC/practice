@@ -30,6 +30,11 @@ public class AcceptCommand extends BaseCommand {
     @Description("Accept a duel.")
     @CommandCompletion("@players")
     public void accept(CommandSender sender, OnlinePlayer target) {
+
+        if (target == null) {
+            return;
+        }
+
         if (sender == target) {
             sender.sendMessage(ChatColor.RED + "You can't accept a duel from yourself!");
             return;
