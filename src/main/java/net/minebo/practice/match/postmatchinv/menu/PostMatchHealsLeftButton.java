@@ -21,25 +21,28 @@ final class PostMatchHealsLeftButton extends Button {
     private final HealingMethod healingMethod;
     private final int healsRemaining;
     private final int missedHeals;
+    private final int usedHeals;
 
-    PostMatchHealsLeftButton(UUID player, HealingMethod healingMethod, int healsRemaining, int missedHeals) {
+    PostMatchHealsLeftButton(UUID player, HealingMethod healingMethod, int healsRemaining, int missedHeals, int usedHeals) {
         this.player = player;
         this.healingMethod = healingMethod;
         this.healsRemaining = healsRemaining;
         this.missedHeals = missedHeals;
+        this.usedHeals = usedHeals;
     }
 
     @Override
     public String getName(Player player) {
-        return ChatColor.GREEN.toString() + healsRemaining + " " + (healsRemaining == 1 ? healingMethod.getLongSingular() : healingMethod.getLongPlural());
+        return ChatColor.RED.toString() + ChatColor.BOLD + "Heals";
     }
 
     @Override
     public List<String> getDescription(Player player) {
         return ImmutableList.of(
-                ChatColor.YELLOW + Bukkit.getPlayer(this.player).getDisplayName() + " had " + healsRemaining + " " + (healsRemaining == 1 ? healingMethod.getLongSingular() : healingMethod.getLongPlural()) + " left.",
-                ChatColor.YELLOW + Bukkit.getPlayer(this.player).getDisplayName() + " missed " + missedHeals + " health potion" + (missedHeals == 1 ? "." : "s.")
-        );
+                ChatColor.DARK_RED + "* " + ChatColor.WHITE + "Used: " + ChatColor.RED + usedHeals,
+                ChatColor.DARK_RED + "* " + ChatColor.WHITE + "Remaining: " + ChatColor.RED + healsRemaining,
+                ChatColor.DARK_RED + "* " + ChatColor.WHITE + "Missed: " + ChatColor.RED + missedHeals,
+                ChatColor.DARK_RED + "* " + ChatColor.WHITE + "Accuracy: " + ChatColor.RED + (getPotionAccuracy() == -1 ? "N/A" : getPotionAccuracy() + "%"));
     }
 
     @Override
@@ -58,5 +61,14 @@ final class PostMatchHealsLeftButton extends Button {
     public int getAmount(Player player) {
         return healsRemaining;
     }
+
+    public int getPotionAccuracy() {
+        if (usedHeals == 0) {
+            return -1;
+        }
+
+        return (100 - (int)((missedHeals / usedHeals) * 100.0));
+    }
+
 
 }

@@ -25,7 +25,7 @@ final class PostMatchPotionEffectsButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return ChatColor.GREEN + "Potion Effects";
+        return ChatColor.LIGHT_PURPLE + ChatColor.BOLD.toString() + "Effects";
     }
 
     @Override
@@ -33,19 +33,18 @@ final class PostMatchPotionEffectsButton extends Button {
         if (!effects.isEmpty()) {
             return effects.stream()
                     .map(effect ->
-                            ChatColor.AQUA +
+                            ChatColor.DARK_PURPLE.toString() + "* " + ChatColor.WHITE +
                                     formatEffectType(effect.getType()) +
                                     " " +
                                     (effect.getAmplifier() + 1) + // 0-indexed to 1-indexed
-                                    ChatColor.GRAY +
-                                    " - " +
+                                    ": " + ChatColor.LIGHT_PURPLE +
                                     TimeUtils.formatIntoMMSS(effect.getDuration() / 20) // / 20 to convert ticks to seconds
                     )
                     .collect(Collectors.toList());
         } else {
             return ImmutableList.of(
                     "",
-                    ChatColor.GRAY + "No potion effects."
+                    ChatColor.WHITE + "No potion effects."
             );
         }
     }

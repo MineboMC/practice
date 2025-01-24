@@ -29,7 +29,7 @@ public final class SettingsMenu extends Menu {
     public Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
 
-        int x = 1;
+        int x = 0;
         int y = 0;
 
         for (Setting setting : Setting.values()) {

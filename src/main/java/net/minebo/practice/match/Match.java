@@ -100,6 +100,10 @@ public final class Match {
     private Map<UUID, Integer> missedPots = Maps.newHashMap();
     private Set<UUID> allPlayers = Sets.newHashSet();
 
+    private Map<UUID, Integer> thrownPots = Maps.newHashMap();
+    private Map<UUID, Integer> thrownDebuffs = Maps.newHashMap();
+    private Map<UUID, Integer> missedDebuffs = Maps.newHashMap();
+
     private Set<UUID> winningPlayers;
     private Set<UUID> losingPlayers;
     
@@ -233,7 +237,7 @@ public final class Match {
                     if (!matchTeam.isAlive(playerUuid)) continue;
 
                     Player player = Bukkit.getPlayer(playerUuid);
-                    postMatchPlayers.computeIfAbsent(playerUuid, v -> new PostMatchPlayer(player, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0)));
+                    postMatchPlayers.computeIfAbsent(playerUuid, v -> new PostMatchPlayer(player, kitType, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0), thrownPots.getOrDefault(player.getUniqueId(), 0), missedDebuffs.getOrDefault(player.getUniqueId(), 0), thrownDebuffs.getOrDefault(player.getUniqueId(), 0)));
                 }
             }
 
@@ -454,8 +458,8 @@ public final class Match {
         
         team.markDead(player.getUniqueId());
         playingCache.remove(player.getUniqueId());
-        
-        postMatchPlayers.put(player.getUniqueId(), new PostMatchPlayer(player, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0)));
+
+        postMatchPlayers.computeIfAbsent(player.getUniqueId(), v -> new PostMatchPlayer(player, kitType, kitType.getHealingMethod(), totalHits.getOrDefault(player.getUniqueId(), 0), longestCombo.getOrDefault(player.getUniqueId(), 0), missedPots.getOrDefault(player.getUniqueId(), 0), thrownPots.getOrDefault(player.getUniqueId(), 0), missedDebuffs.getOrDefault(player.getUniqueId(), 0), thrownDebuffs.getOrDefault(player.getUniqueId(), 0)));
         checkEnded();
     }
     

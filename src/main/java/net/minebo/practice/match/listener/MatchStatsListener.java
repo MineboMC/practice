@@ -3,10 +3,7 @@ package net.minebo.practice.match.listener;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -66,14 +63,17 @@ public class MatchStatsListener implements Listener {
         Match match = Practice.getInstance().getMatchHandler().getMatchPlaying(player);
 
         if (match == null) return;
-        match.getMissedPots().put(player.getUniqueId(), match.getMissedPots().getOrDefault(player.getUniqueId(), 0) + 1);
+
+        if (thrownPotion.getItem().getDurability() == 16421 || thrownPotion.getItem().getDurability() == 16385) {
+            match.getThrownPots().put(player.getUniqueId(), match.getThrownPots().getOrDefault(player.getUniqueId(), 0) + 1);
+        } else if (thrownPotion.getItem().getDurability() == 16388 || thrownPotion.getItem().getDurability() == 16426 || thrownPotion.getItem().getDurability() == 16424 || thrownPotion.getItem().getDurability() == 16428 || thrownPotion.getItem().getDurability() == 16458 || thrownPotion.getItem().getDurability() == 16420) {
+            match.getThrownDebuffs().put(player.getUniqueId(), match.getThrownPots().getOrDefault(player.getUniqueId(), 0) + 1);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onSplash(PotionSplashEvent event) {
+    public void onSplashPotion(PotionSplashEvent event) {
         ThrownPotion thrownPotion = event.getEntity();
-
-        if (thrownPotion.getItem().getDurability() != 16421) return; // now we know it's a health pot!
 
         ProjectileSource projectileSource = thrownPotion.getShooter();
         if (!(projectileSource instanceof Player)) return;
@@ -83,23 +83,31 @@ public class MatchStatsListener implements Listener {
 
         if (match == null) return;
 
-        for (LivingEntity affectedEntity : event.getAffectedEntities()) {
-            if (!affectedEntity.getUniqueId().equals(player.getUniqueId())) continue;
-
-            if (event.getIntensity(affectedEntity) == 1.0D) {
-                match.getMissedPots().put(player.getUniqueId(), Math.max(match.getMissedPots().getOrDefault(player.getUniqueId(), 1) - 1, 0));
+        if (thrownPotion.getItem().getDurability() == 16421 || thrownPotion.getItem().getDurability() == 16385) {
+            if (event.getIntensity(player) <= 0.65D) {
+                match.getMissedPots().put(player.getUniqueId(), Math.max(match.getMissedPots().getOrDefault(player.getUniqueId(), 1) + 1, 0));
+            }
+        } else if (thrownPotion.getItem().getDurability() == 16388 || thrownPotion.getItem().getDurability() == 16426 || thrownPotion.getItem().getDurability() == 16424 || thrownPotion.getItem().getDurability() == 16428 | thrownPotion.getItem().getDurability() == 16458 || thrownPotion.getItem().getDurability() == 16420) {
+            for (Entity e : thrownPotion.getNearbyEntities(thrownPotion.getLocation().getX(), thrownPotion.getLocation().getY(), thrownPotion.getLocation().getZ())) {
+                for (UUID u : match.getTeam(player.getUniqueId()).getAliveMembers()) {
+                    if (e.getUniqueId() != u) {
+                        if (event.getIntensity((Player)e) <= 0.50D) {
+                            match.getMissedDebuffs().put(player.getUniqueId(), Math.max(match.getMissedDebuffs().getOrDefault(player.getUniqueId(), 1) + 1, 0));
+                        }
+                    }
+                }
             }
         }
     }
-/*
+/* -- Borrowed from ArenaPvP (juku labs)
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMatchEnd(MatchEndEvent event) {
         Match match = event.getMatch();
         match.getTeams().forEach(team -> {
             if (match.getWinner() == team) {
-                team.getAllMembers().forEach(PotPvPRP.getInstance().getWinsMap()::incrementWins);
+                team.getAllMembers().forEach(Ares.getInstance().getWinsMap()::incrementWins);
             } else {
-                team.getAllMembers().forEach(PotPvPRP.getInstance().getLossMap()::incrementLosses);
+                team.getAllMembers().forEach(Ares.getInstance().getLossMap()::incrementLosses);
             }
         });
     }

@@ -20,12 +20,12 @@ final class PostMatchFoodLevelButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return ChatColor.GREEN.toString() + foodLevel + "/20 Hunger";
+        return ChatColor.YELLOW + ChatColor.BOLD.toString() + "Food";
     }
 
     @Override
     public List<String> getDescription(Player player) {
-        return ImmutableList.of();
+        return ImmutableList.of(ChatColor.GOLD + "* " + ChatColor.WHITE + foodLevel + ChatColor.YELLOW + " Hunger");
     }
 
     @Override

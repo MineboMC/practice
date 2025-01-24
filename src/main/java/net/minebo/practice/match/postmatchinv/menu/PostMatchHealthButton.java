@@ -20,12 +20,12 @@ final class PostMatchHealthButton extends Button {
 
     @Override
     public String getName(Player player) {
-        return ChatColor.GREEN.toString() + health + "/10  ❤";
+        return ChatColor.RED + ChatColor.BOLD.toString() + "Health";
     }
 
     @Override
     public List<String> getDescription(Player player) {
-        return ImmutableList.of();
+        return ImmutableList.of(ChatColor.DARK_RED + "* " + ChatColor.WHITE + health + ChatColor.RED + " ❤");
     }
 
     @Override

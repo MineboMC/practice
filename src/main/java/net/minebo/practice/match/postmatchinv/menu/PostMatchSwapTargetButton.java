@@ -7,6 +7,7 @@ import net.minebo.practice.match.postmatchinv.PostMatchPlayer;
 import net.minebo.practice.util.menu.Button;
 import com.google.common.collect.ImmutableList;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,15 +24,17 @@ final class PostMatchSwapTargetButton extends Button {
     }
 
     @Override
-    public String getName(Player player) {
-        return ChatColor.GREEN + "View " + Practice.getInstance().getUuidCache().name(newTarget.getPlayerUuid()) + "'s inventory";
+    public String getName(Player sender) {
+        Player player = Bukkit.getPlayer(newTarget.getPlayerUuid());
+        return ChatColor.GREEN + "View " + player.getDisplayName() + ChatColor.GREEN + "'s inventory";
     }
 
     @Override
-    public List<String> getDescription(Player player) {
+    public List<String> getDescription(Player target) {
+        Player player = Bukkit.getPlayer(newTarget.getPlayerUuid());
         return ImmutableList.of(
-            "",
-            ChatColor.YELLOW + "Swap your view to " + Practice.getInstance().getUuidCache().name(newTarget.getPlayerUuid()) + "'s inventory"
+                "",
+                ChatColor.YELLOW + "Swap your view to " + player.getDisplayName() + ChatColor.YELLOW + "'s inventory"
         );
     }
 
@@ -41,8 +44,7 @@ final class PostMatchSwapTargetButton extends Button {
     }
 
     @Override
-    public void clicked(Player player, int slot, ClickType clickType) {
+    public void clicked(Player player, int i, ClickType clickType) {
         new PostMatchMenu(newTarget).openMenu(player);
     }
-
 }

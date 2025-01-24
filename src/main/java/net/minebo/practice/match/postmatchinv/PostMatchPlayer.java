@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import net.minebo.practice.kit.kittype.HealingMethod;
 
+import net.minebo.practice.kit.kittype.KitType;
 import net.minebo.practice.util.PlayerUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,8 +31,12 @@ public final class PostMatchPlayer {
     @Getter private final int longestCombo;
     @Getter private final int missedPots;
     @Getter private final int ping;
+    @Getter private int thrownPots;
+    @Getter private int missedDebuffs;
+    @Getter private int thrownDebuffs;
+    @Getter private KitType kit;
 
-    public PostMatchPlayer(Player player, HealingMethod healingMethodUsed, int totalHits, int longestCombo, int missedPots) {
+    public PostMatchPlayer(Player player, KitType kit, HealingMethod healingMethodUsed, int totalHits, int longestCombo, int missedPots, int thrownPots, int missedDebuffs, int thrownDebuffs) {
         this.playerUuid = player.getUniqueId();
         this.lastUsername = player.getName();
         this.armor = player.getInventory().getArmorContents();
@@ -44,5 +49,10 @@ public final class PostMatchPlayer {
         this.longestCombo = longestCombo;
         this.missedPots = missedPots;
         this.ping = PlayerUtils.getPing(player);
+        this.thrownPots = thrownPots;
+        this.missedDebuffs = missedDebuffs;
+        this.thrownDebuffs = thrownDebuffs;
+        this.kit = kit;
     }
+
 }

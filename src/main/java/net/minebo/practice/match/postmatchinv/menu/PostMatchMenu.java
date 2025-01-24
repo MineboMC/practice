@@ -25,8 +25,8 @@ public final class PostMatchMenu extends Menu {
     }
 
     @Override
-    public String getTitle(Player player) {
-        return "Inventory of " + Bukkit.getPlayer(target.getPlayerUuid()).getDisplayName();
+    public String getTitle(Player player){
+        return ("Inventory of " + Bukkit.getPlayer(target.getPlayerUuid()).getDisplayName());
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class PostMatchMenu extends Menu {
 
         y++; // advance line for status buttons
 
-        int position = 0;
+        int position = 2;
         buttons.put(getSlot(position++, y), new PostMatchHealthButton(target.getHealth()));
         buttons.put(getSlot(position++, y), new PostMatchFoodLevelButton(target.getHunger()));
         buttons.put(getSlot(position++, y), new PostMatchPotionEffectsButton(target.getPotionEffects()));
@@ -69,10 +69,10 @@ public final class PostMatchMenu extends Menu {
 
         if (healingMethod != null) {
             int count = healingMethod.count(targetInv.toArray(new ItemStack[targetInv.size()]));
-            buttons.put(getSlot(position++, y), new PostMatchHealsLeftButton(target.getPlayerUuid(), healingMethod, count, target.getMissedPots()));
+            buttons.put(getSlot(position++, y), new PostMatchHealsLeftButton(target.getPlayerUuid(), healingMethod, count, target.getMissedPots(), target.getThrownPots()));
         }
 
-        buttons.put(getSlot(position++, y), new PostMatchStatisticsButton(target.getTotalHits(), target.getLongestCombo()));
+        buttons.put(getSlot(position++, y), new PostMatchStatisticsButton(target.getKit(), target.getHealingMethodUsed(), target.getTotalHits(), target.getLongestCombo(), target.getMissedPots(), target.getThrownPots(), target.getMissedDebuffs(), target.getThrownDebuffs()));
         // swap to other player button (for 1v1s)
         PostMatchInvHandler postMatchInvHandler = Practice.getInstance().getPostMatchInvHandler();
         Collection<PostMatchPlayer> postMatchPlayers = postMatchInvHandler.getPostMatchData(player.getUniqueId()).values();

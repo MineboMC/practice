@@ -1,6 +1,7 @@
 package net.minebo.practice.util.menu;
 
 import net.minebo.practice.Practice;
+import net.minebo.practice.util.ItemBuilder;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
@@ -81,6 +82,10 @@ public abstract class Menu {
 
     private ItemStack createItemStack(Player player, Button button) {
         ItemStack item = button.getButtonItem(player);
+
+        if(item == null) {
+            return ItemBuilder.of(Material.AIR).build();
+        }
 
         if (item.getType() != Material.SKULL_ITEM) {
 

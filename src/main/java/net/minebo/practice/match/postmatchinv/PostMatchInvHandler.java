@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public final class PostMatchInvHandler {
 
@@ -43,17 +44,13 @@ public final class PostMatchInvHandler {
         Map<UUID, PostMatchPlayer> matchPlayers = match.getPostMatchPlayers();
 
         for (MatchTeam team : match.getTeams()) {
-            for (UUID member : team.getAllMembers()) {
+            for (UUID member : team.getAliveMembers()) {
                 playerData.put(member, matchPlayers);
-                System.out.println("Saved player data for " + Bukkit.getPlayer(member).getName());
             }
         }
 
         for (UUID spectator : match.getSpectators()) {
-            if(!playerData.containsKey(spectator)) {
-                playerData.put(spectator, matchPlayers);
-                System.out.println("Saved player data for " + Bukkit.getPlayer(spectator).getName());
-            }
+            playerData.put(spectator, matchPlayers);
         }
     }
 
@@ -66,10 +63,7 @@ public final class PostMatchInvHandler {
         // don't count actual players and players in silent mode.
         spectatorUuids.removeIf(uuid -> {
             Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                return player.hasMetadata("ModMode") || match.getPreviousTeam(uuid) != null;
-            }
-            return true;
+            return player == null || player.hasMetadata("ModMode") || match.getPreviousTeam(uuid) != null;
         });
 
         if (!spectatorUuids.isEmpty()) {
@@ -77,10 +71,10 @@ public final class PostMatchInvHandler {
             spectatorNames.sort(String::compareToIgnoreCase);
 
             String firstFourNames = Joiner.on(", ").join(
-                spectatorNames.subList(
-                    0,
-                    Math.min(spectatorNames.size(), 4)
-                )
+                    spectatorNames.subList(
+                            0,
+                            Math.min(spectatorNames.size(), 4)
+                    )
             );
 
             if (spectatorNames.size() > 4) {
@@ -88,15 +82,15 @@ public final class PostMatchInvHandler {
             }
 
             HoverEvent hover = new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                spectatorNames.stream()
-                    .map(n -> new TextComponent(ChatColor.AQUA + n + '\n'))
-                    .toArray(BaseComponent[]::new)
+                    HoverEvent.Action.SHOW_TEXT,
+                    spectatorNames.stream()
+                            .map(n -> new TextComponent(ChatColor.AQUA + n + '\n'))
+                            .toArray(BaseComponent[]::new)
             );
 
             spectatorLine = new ComponentBuilder("Spectators (" + spectatorNames.size() + "): ").color(ChatColor.AQUA)
-                .append(firstFourNames).color(ChatColor.GRAY).event(hover)
-                .create();
+                    .append(firstFourNames).color(ChatColor.GRAY).event(hover)
+                    .create();
         } else {
             // this is dumb but it lets us make the variable effectively final
             // (and avoid a working variable)
@@ -112,8 +106,11 @@ public final class PostMatchInvHandler {
                 return;
             }
 
-            player.sendMessage(PostMatchInvLang.LINE);
-            player.sendMessage(Practice.getInstance().getDominantColor() + "Post-Match Inventories " + ChatColor.GRAY + "(click name to view)");
+            String winnersLine = ChatColor.YELLOW + "Winner" + (match.getWinner().getAllMembers().size() == 1 ? "" : "s") + ": " + ChatColor.YELLOW;
+            winnersLine = winnersLine + Joiner.on(", ").join(match.getWinningPlayers().stream().map(u -> Bukkit.getPlayer(u).getName()).collect(Collectors.toList()));
+
+            player.sendMessage("");
+            player.sendMessage(winnersLine);
 
             for (Object line : lines) {
                 if (line instanceof TextComponent[]) {
@@ -129,7 +126,7 @@ public final class PostMatchInvHandler {
                 player.spigot().sendMessage(spectatorLine);
             }
 
-            player.sendMessage(PostMatchInvLang.LINE);
+            player.sendMessage("");
         });
     }
 
@@ -170,11 +167,17 @@ public final class PostMatchInvHandler {
 
     private void writeTeamInvMessages(MatchTeam team, Map<UUID, Object[]> messageMap, Object[] messages) {
         for (UUID member : team.getAllMembers()) {
-            // Remove the alive check to ensure all team members are included.
-            messageMap.put(member, messages);
+            // on this containsKey check:
+            // we only want to send messages to players who are alive or were on this team in the match
+            // we always add messages from the least specific (ex generic for spectators)
+            // to most specific (ex per team messages), so checking if they're already added is a good
+            // way to check if they're going to get a message.
+            // we can't just use getAllMembers because players could've left and started a new fight
+            if (messageMap.containsKey(member) || team.isAlive(member)) {
+                messageMap.put(member, messages);
+            }
         }
     }
-
 
     private void writeSpecInvMessages(Match match, Map<UUID, Object[]> messageMap, Object[] messages) {
         for (UUID spectator : match.getSpectators()) {
