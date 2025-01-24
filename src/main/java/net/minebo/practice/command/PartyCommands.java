@@ -131,7 +131,7 @@ public class PartyCommands extends BaseCommand {
                     teams.add(new MatchTeam(member));
                 }
 
-                matchHandler.startMatch(teams, kitType, false, false);
+                matchHandler.startMatch(teams, kitType, false, false, null);
             }, "Start a Party FFA...").openMenu(sender);
         }
     }

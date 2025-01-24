@@ -1,7 +1,6 @@
 package net.minebo.practice.arena.menu.select;
 
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,51 +11,46 @@ import com.google.common.collect.Lists;
 
 import lombok.AllArgsConstructor;
 import net.minebo.practice.util.menu.Button;
+import net.minebo.practice.util.Callback;
 
 @AllArgsConstructor
 public class ArenaButton extends Button {
 
     private String mapName;
-    private Set<String> maps;
-    
+    private boolean isSelected;
+    private Callback<String> selectionCallback; // Updates the selected map
+
     @Override
     public String getName(Player player) {
-        return mapName;
+        return (isSelected ? ChatColor.GREEN : ChatColor.RED) + mapName;
     }
-    
+
     @Override
     public List<String> getDescription(Player player) {
         List<String> lines = Lists.newLinkedList();
-        
-        boolean isEnabled = maps.contains(mapName);
-        
-        if (isEnabled) {
-            lines.add(ChatColor.GRAY + "Click here to " + ChatColor.RED + "remove" + ChatColor.GRAY + " this arena from the selection.");
+
+        if (isSelected) {
+            lines.add(ChatColor.GRAY + "Click to deselect this arena.");
         } else {
-            lines.add(ChatColor.GRAY + "Click here to " + ChatColor.GREEN + "add" + ChatColor.GRAY + " this arena to the selection.");
+            lines.add(ChatColor.GRAY + "Click to select this arena.");
         }
-        
+
         return lines;
     }
 
     @Override
     public Material getMaterial(Player player) {
-        boolean isEnabled = maps.contains(mapName);
-        
-        return isEnabled ? Material.MAP : Material.EMPTY_MAP;
+        return isSelected ? Material.MAP : Material.EMPTY_MAP;
     }
 
     @Override
     public void clicked(Player player, int slot, ClickType clickType) {
-        if (maps.contains(mapName)) {
-            maps.remove(mapName);
-            
-            player.sendMessage(ChatColor.RED + "Removed " + mapName + " from the selection.");
+        if (isSelected) {
+            player.sendMessage(ChatColor.RED + "Deselected " + mapName + ".");
+            selectionCallback.callback(null); // Deselect the arena
         } else {
-            maps.add(mapName);
-            
-            player.sendMessage(ChatColor.GREEN + "Added " + mapName + " to your selection.");
+            player.sendMessage(ChatColor.GREEN + "Selected " + mapName + ".");
+            selectionCallback.callback(mapName); // Select the arena
         }
-        
     }
 }

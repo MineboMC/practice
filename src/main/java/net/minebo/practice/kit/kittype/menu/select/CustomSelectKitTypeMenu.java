@@ -55,7 +55,7 @@ public final class CustomSelectKitTypeMenu extends Menu {
         int y = 0;
 
         for (KitType kitType : KitType.getAllTypes()) {
-            if (!player.isOp() && kitType.isHidden()) {
+            if (kitType.isHidden()) {
                 continue;
             }
             if (ranked && !kitType.isSupportsRanked()) {

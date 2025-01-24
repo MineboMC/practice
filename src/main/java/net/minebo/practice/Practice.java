@@ -144,6 +144,7 @@ public final class Practice extends JavaPlugin {
 
         ClickTracker.init();
 
+        this.getServer().getPluginManager().registerEvents(new BasicJoinListener(), this);
         this.getServer().getPluginManager().registerEvents(new BasicPreventionListener(), this);
         this.getServer().getPluginManager().registerEvents(new BowHealthListener(), this);
         this.getServer().getPluginManager().registerEvents(new ChatToggleListener(), this);

@@ -3,6 +3,7 @@ package net.minebo.practice.command.duel;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
+import net.minebo.practice.arena.menu.select.SelectArenaMenu;
 import net.minebo.practice.misc.Lang;
 import net.minebo.practice.Practice;
 import net.minebo.practice.match.duel.DuelHandler;
@@ -54,21 +55,23 @@ public final class DuelCommand extends BaseCommand {
             }
 
             new SelectKitTypeMenu(kitType -> {
-                ((Player) sender).closeInventory();
+                new SelectArenaMenu(kitType, arenaName -> {
+                    ((Player) sender).closeInventory();
 
-                // reassign these fields so that any party changes
-                // (kicks, etc) are reflected now
-                Party newSenderParty = partyHandler.getParty(((Player) sender));
-                Party newTargetParty = partyHandler.getParty(target.getPlayer());
+                    // Reassign these fields so that any party changes (kicks, etc.) are reflected
+                    Party newSenderParty = partyHandler.getParty(((Player) sender));
+                    Party newTargetParty = partyHandler.getParty(target.getPlayer());
 
-                if (newSenderParty != null && newTargetParty != null) {
-                    if (newSenderParty.isLeader(((Player) sender).getUniqueId())) {
-                        duel(((Player) sender), newSenderParty, newTargetParty, kitType);
-                    } else {
-                        sender.sendMessage(Lang.NOT_LEADER_OF_PARTY);
+                    if (newSenderParty != null && newTargetParty != null) {
+                        if (newSenderParty.isLeader(((Player) sender).getUniqueId())) {
+                            duel(((Player) sender), newSenderParty, newTargetParty, kitType, arenaName);
+                        } else {
+                            sender.sendMessage(Lang.NOT_LEADER_OF_PARTY);
+                        }
                     }
-                }
+                }).openMenu((Player) sender);
             }, "Select a ladder...").openMenu(((Player) sender));
+
         } else if (senderParty == null && targetParty == null) {
             // player dueling player (legal)
             if (!Validation.canSendDuel(((Player) sender), target.getPlayer())) {
@@ -81,8 +84,10 @@ public final class DuelCommand extends BaseCommand {
             }
 
             new SelectKitTypeMenu(kitType -> {
-                ((Player) sender).closeInventory();
-                duel(((Player) sender), target, kitType);
+                new SelectArenaMenu(kitType, arenaName -> {
+                    ((Player) sender).closeInventory();
+                    duel((Player) sender, target, kitType, arenaName);
+                }).openMenu((Player) sender);
             }, "Select a kit type...").openMenu(((Player) sender));
         } else if (senderParty == null) {
             // player dueling party (illegal)
@@ -93,7 +98,7 @@ public final class DuelCommand extends BaseCommand {
         }
     }
 
-    public void duel(Player sender, OnlinePlayer target, KitType kitType) {
+    public void duel(Player sender, OnlinePlayer target, KitType kitType, String arenaName) {
         if (!Validation.canSendDuel(sender, target.getPlayer())) {
             return;
         }
@@ -121,14 +126,14 @@ public final class DuelCommand extends BaseCommand {
             }
         }
 
-        target.getPlayer().sendMessage(ChatColor.AQUA + sender.getName() + ChatColor.YELLOW + " has sent you a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel.");
+        target.getPlayer().sendMessage(ChatColor.AQUA + sender.getName() + ChatColor.YELLOW + " has sent you a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel on arena " + ChatColor.LIGHT_PURPLE + arenaName + ChatColor.YELLOW + ".");
         target.getPlayer().spigot().sendMessage(createInviteNotification(sender.getName()));
 
-        sender.sendMessage(ChatColor.YELLOW + "Successfully sent a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel invite to " + ChatColor.AQUA + target.getPlayer().getName() + ChatColor.YELLOW + ".");
-        duelHandler.insertInvite(new PlayerDuelInvite(sender, target.getPlayer(), kitType));
+        sender.sendMessage(ChatColor.YELLOW + "Successfully sent a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel invite to " + ChatColor.AQUA + target.getPlayer().getName() + ChatColor.YELLOW + " on arena " + ChatColor.LIGHT_PURPLE + arenaName + ChatColor.YELLOW + ".");
+        duelHandler.insertInvite(new PlayerDuelInvite(sender, target.getPlayer(), kitType, arenaName));
     }
 
-    public void duel(Player sender, Party senderParty, Party targetParty, KitType kitType) {
+    public void duel(Player sender, Party senderParty, Party targetParty, KitType kitType, String arenaName) {
         if (!Validation.canSendDuel(senderParty, targetParty, sender)) {
             return;
         }
@@ -137,8 +142,7 @@ public final class DuelCommand extends BaseCommand {
         DuelInvite autoAcceptInvite = duelHandler.findInvite(targetParty, senderParty);
         String targetPartyLeader = Practice.getInstance().getUuidCache().name(targetParty.getLeader());
 
-        // if two players duel each other for the same thing automatically
-        // accept it to make their life a bit easier.
+        // Automatically accept if both parties send the same duel invite
         if (autoAcceptInvite != null && autoAcceptInvite.getKitType() == kitType) {
             new AcceptCommand().accept(sender, (OnlinePlayer) Bukkit.getPlayer(targetParty.getLeader()));
             return;
@@ -151,17 +155,20 @@ public final class DuelCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.YELLOW + "You have already invited " + ChatColor.AQUA + targetPartyLeader + "'s party" + ChatColor.YELLOW + " to a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel.");
                 return;
             } else {
-                // if an invite was already sent (with a different kit type)
-                // just delete it (so /accept will accept the 'latest' invite)
+                // Remove previous invite with a different kit type
                 duelHandler.removeInvite(alreadySentInvite);
             }
         }
 
-        targetParty.message(ChatColor.AQUA + sender.getName() + "'s Party (" + senderParty.getMembers().size() + ")" + ChatColor.YELLOW + " has sent you a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel.");
+        // Notify the target party of the duel invite
+        targetParty.message(ChatColor.AQUA + sender.getName() + "'s Party (" + senderParty.getMembers().size() + ")" + ChatColor.YELLOW + " has sent you a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel on arena " + ChatColor.LIGHT_PURPLE + arenaName + ChatColor.YELLOW + ".");
         Bukkit.getPlayer(targetParty.getLeader()).spigot().sendMessage(createInviteNotification(sender.getName()));
 
-        sender.sendMessage(ChatColor.YELLOW + "Successfully sent a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel invite to " + ChatColor.AQUA + targetPartyLeader + "'s party" + ChatColor.YELLOW + ".");
-        duelHandler.insertInvite(new PartyDuelInvite(senderParty, targetParty, kitType));
+        // Notify the sender of the successful invite
+        sender.sendMessage(ChatColor.YELLOW + "Successfully sent a " + kitType.getColoredDisplayName() + ChatColor.YELLOW + " duel invite to " + ChatColor.AQUA + targetPartyLeader + "'s party" + ChatColor.YELLOW + " on arena " + ChatColor.LIGHT_PURPLE + arenaName + ChatColor.YELLOW + ".");
+
+        // Insert the duel invite with the specified arena
+        duelHandler.insertInvite(new PartyDuelInvite(senderParty, targetParty, kitType, arenaName));
     }
 
     private TextComponent[] createInviteNotification(String sender) {

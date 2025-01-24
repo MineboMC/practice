@@ -182,7 +182,7 @@ public class Tournament {
             Party firstParty = oldPartyList.remove(0);
             Party secondParty = oldPartyList.remove(0);
 
-            matches.add(Practice.getInstance().getMatchHandler().startMatch(ImmutableList.of(new MatchTeam(firstParty.getMembers()), new MatchTeam(secondParty.getMembers())), type, false, false));
+            matches.add(Practice.getInstance().getMatchHandler().startMatch(ImmutableList.of(new MatchTeam(firstParty.getMembers()), new MatchTeam(secondParty.getMembers())), type, false, false, null));
         }
 
         if (oldPartyList.size() == 1) {

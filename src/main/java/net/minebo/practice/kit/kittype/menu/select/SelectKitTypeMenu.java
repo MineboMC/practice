@@ -54,7 +54,7 @@ public final class SelectKitTypeMenu extends Menu {
 
         for (KitType kitType : KitType.getAllTypes()) {
 
-            if (!player.isOp() && kitType.isHidden()) {
+            if (!title.contains("Manage") && kitType.isHidden()) {
                 continue;
             }
             buttons.put(getSlot(x, y), new KitTypeButton(kitType, callback));

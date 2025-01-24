@@ -36,7 +36,7 @@ public final class RematchItemListener implements Listener {
             if (rematchData != null) {
                 Player target = Bukkit.getPlayer(rematchData.getTarget());
                 if (target != null) {
-                    new DuelCommand().duel(player, (OnlinePlayer) target, rematchData.getKitType());
+                    new DuelCommand().duel(player, (OnlinePlayer) target, rematchData.getKitType(), rematchData.getArenaName());
 
                     InventoryUtils.resetInventoryDelayed(player);
                     InventoryUtils.resetInventoryDelayed(target);

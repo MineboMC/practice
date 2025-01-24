@@ -17,10 +17,10 @@ import net.minebo.practice.util.Callback;
 
 @AllArgsConstructor
 public class SendDuelButton extends Button {
-    
-    private Set<String> maps;
-    private Callback<Set<String>> mapsCallback;
-    
+
+    private String selectedMap; // Single selected map
+    private Callback<String> mapCallback;
+
     @Override
     public List<String> getDescription(Player arg0) {
         return ImmutableList.of();
@@ -35,20 +35,19 @@ public class SendDuelButton extends Button {
     public byte getDamageValue(Player arg0) {
         return DyeColor.LIME.getWoolData();
     }
-    
+
     @Override
     public String getName(Player player) {
         return ChatColor.GREEN + "Send duel";
     }
-    
+
     @Override
     public void clicked(Player player, int slot, ClickType clickType) {
-        if (maps.size() < 2) {
-            player.sendMessage(ChatColor.RED + "You must select at least two maps.");
+        if (selectedMap == null || selectedMap.isEmpty()) {
+            player.sendMessage(ChatColor.RED + "You must select a map before sending the duel.");
             return;
         }
-        
-        mapsCallback.callback(maps);
+
+        mapCallback.callback(selectedMap); // Callback with the single selected map
     }
-    
 }
